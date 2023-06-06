@@ -18,7 +18,6 @@ while running:
     screen.fill(GRAY)
 
     # run instances here
-    level.run()
 
     myClock.tick(60)
     pygame.display.update() 
