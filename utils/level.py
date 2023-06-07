@@ -4,6 +4,7 @@ from utils.tiles.terrain import Terrain
 from utils.tiles.spikes import Spikes
 from utils.tiles.fruits import Apple, Banana, Cherry, Stawberry, Pineapple
 from utils.tiles.falling_trap import FallingTrap
+from utils.player import Player
 from constants import *
 
 # keep creating new instances of this class for different levels
@@ -23,6 +24,10 @@ class Level:
             "assets/terrain/terrain.png", (16, 16))
         self.terrain_sprites = self.create_group("terrain")
 
+        # player
+        self.player = import_csv(self.data["player"])
+        self.player_sprite = self.create_group("player")
+
         # traps
         self.traps = import_csv(self.data["traps"])
         self.traps_sprites = self.create_group("traps")
@@ -41,6 +46,15 @@ class Level:
                 posY = x * TILESIZE
 
                 # this class creates groups for multiple types of tilesets
+
+                if type == "player" and self.player[x][y] == "1":
+                    sprite = pygame.sprite.GroupSingle()
+
+                    player = Player((posX, posY))
+                    sprite.add(player)
+
+                    return sprite
+
 
                 # terrain tileset and the value is not -1
                 if type == "terrain" and val != "-1":
@@ -126,6 +140,10 @@ class Level:
         # terrain sprites draw and update
         self.terrain_sprites.draw(self.screen)
         self.terrain_sprites.update(self.shiftX, self.shiftY)
+
+        # player sprites draw and update
+        self.player_sprite.draw(self.screen)
+        self.player_sprite.update()
 
         # trap sprites draw and update
         self.traps_sprites.draw(self.screen)
