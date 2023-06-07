@@ -2,6 +2,7 @@ import pygame
 from utils.support import import_csv, import_sprite_sheet
 from utils.tiles.terrain import Terrain
 from utils.tiles.spikes import Spikes
+from utils.tiles.fruits import Apple
 from utils.tiles.falling_trap import FallingTrap
 from constants import *
 
@@ -22,6 +23,10 @@ class Level:
         # traps
         self.traps = import_csv(self.data["traps"])
         self.traps_sprites = self.create_group("traps")
+
+        # fruits
+        self.fruits = import_csv(self.data["fruits"])
+        self.fruits_sprites = self.create_group("fruits")
     
     # creating the tiles for terrains and collectables
     def create_group(self, type):
@@ -53,6 +58,13 @@ class Level:
                     # spikes
                     if self.traps[x][y] == "5":
                         sprite = Spikes(posX, posY)
+                        group.add(sprite)
+                    
+                # fruit tilesets
+                if type == "fruits":
+                    # Apple
+                    if self.fruits[x][y] == "1":
+                        sprite = Apple(posX, posY)
                         group.add(sprite)
 
         
@@ -88,8 +100,14 @@ class Level:
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
     def run(self):
+        # terrain sprites draw and update
         self.terrain_sprites.draw(self.screen)
         self.terrain_sprites.update(self.shiftX, self.shiftY)
 
+        # trap sprites draw and update
         self.traps_sprites.draw(self.screen)
         self.traps_sprites.update(self.shiftX, self.shiftY)
+
+        # fruit sprites draw and update
+        self.fruits_sprites.draw(self.screen)
+        self.fruits_sprites.update(self.shiftX, self.shiftY)
