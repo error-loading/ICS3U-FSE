@@ -2,11 +2,13 @@ import pygame
 from utils.support import import_csv, import_sprite_sheet
 from utils.tiles.terrain import Terrain
 from utils.tiles.spikes import Spikes
-from utils.tiles.fruits import Apple
+from utils.tiles.fruits import Apple, Banana, Cherry, Stawberry, Pineapple
 from utils.tiles.falling_trap import FallingTrap
 from constants import *
 
 # keep creating new instances of this class for different levels
+
+
 class Level:
     def __init__(self, screen, data):
         # general info
@@ -17,7 +19,8 @@ class Level:
 
         # terrain
         self.terrain = import_csv(self.data["terrain"])
-        self.terrain_sprite_sheet = import_sprite_sheet("assets/terrain/terrain.png", (16, 16))
+        self.terrain_sprite_sheet = import_sprite_sheet(
+            "assets/terrain/terrain.png", (16, 16))
         self.terrain_sprites = self.create_group("terrain")
 
         # traps
@@ -27,7 +30,7 @@ class Level:
         # fruits
         self.fruits = import_csv(self.data["fruits"])
         self.fruits_sprites = self.create_group("fruits")
-    
+
     # creating the tiles for terrains and collectables
     def create_group(self, type):
         group = pygame.sprite.Group()
@@ -41,7 +44,8 @@ class Level:
 
                 # terrain tileset and the value is not -1
                 if type == "terrain" and val != "-1":
-                    sprite = Terrain(posX, posY, self.terrain_sprite_sheet, int(val))
+                    sprite = Terrain(
+                        posX, posY, self.terrain_sprite_sheet, int(val))
                     group.add(sprite)
 
                 # traps tilesets
@@ -59,7 +63,7 @@ class Level:
                     if self.traps[x][y] == "5":
                         sprite = Spikes(posX, posY)
                         group.add(sprite)
-                    
+
                 # fruit tilesets
                 if type == "fruits":
                     # Apple
@@ -67,7 +71,26 @@ class Level:
                         sprite = Apple(posX, posY)
                         group.add(sprite)
 
-        
+                    # Banana
+                    elif self.fruits[x][y] == "2":
+                        sprite = Banana(posX, posY)
+                        group.add(sprite)
+
+                    # Cherry
+                    elif self.fruits[x][y] == "3":
+                        sprite = Cherry(posX, posY)
+                        group.add(sprite)
+
+                    # Stawberry
+                    elif self.fruits[x][y] == "4":
+                        sprite = Stawberry(posX, posY)
+                        group.add(sprite)
+
+                    # Pineapple
+                    elif self.fruits[x][y] == "6":
+                        sprite = Pineapple(posX, posY)
+                        group.add(sprite)
+
         return group
 
     # creating the player
@@ -90,7 +113,7 @@ class Level:
     def reset(self):
         pass
 
-    # function for teleporting 
+    # function for teleporting
     def teleport(self):
         pass
 
