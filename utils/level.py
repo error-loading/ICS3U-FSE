@@ -159,6 +159,10 @@ class Level:
         else:
             self.shiftX = 0
             player.speed = 5
+    
+    def scrollY(self):
+        player = self.player_sprite.sprite
+        self.shiftY = player.direction.y
 
     # function for teleporting
     def teleport(self):
@@ -204,3 +208,4 @@ class Level:
         self.horizonal_collide()
         self.fruit_collide()
         self.scrollX()
+        self.scrollY()

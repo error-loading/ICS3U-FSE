@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.jump_speed = -19
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 5
-        self.in_air = False
+        self.in_air = True
 
         # animations
         self.animation = []
@@ -52,7 +52,11 @@ class Player(pygame.sprite.Sprite):
 
     # getting gravity
     def get_gravity(self):
-        self.direction.y += self.gravity
+        if self.in_air:
+            self.direction.y += self.gravity
+        else:
+            self.direction.y = 0
+
         self.rect.y += self.direction.y
 
     # getting imgs
