@@ -1,7 +1,6 @@
 # tiled info
-TILESIZE = 64
-MAP_WIDTH = 60
-MAP_HEIGHT = 12
+TILESIZE = 16
+MAP_HEIGHT = 42
 
 # screen info
 WIDTH = 1080

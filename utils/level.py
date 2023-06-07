@@ -1,18 +1,40 @@
 import pygame
-from utils.support import import_csv
+from utils.support import import_csv, import_sprite_sheet
+from utils.terrain import Terrain
+from constants import *
 
 # keep creating new instances of this class for different levels
 class Level:
     def __init__(self, screen, data):
+        # general info
         self.screen = screen
         self.data = data
+        self.shiftX = 0
+        self.shiftY = 0
 
         # terrain
-        self.terrain = import_csv()
+        self.terrain = import_csv(self.data["terrain"])
+        self.terrain_sprite_sheet = import_sprite_sheet(self.data["terrain"], (16, 16))
+        self.terrain_sprites = self.create_group("terrain")
     
     # creating the tiles for terrains and collectables
     def create_group(self, type):
-        pass
+        group = pygame.sprite.Group()
+
+        for x, row in enumerate(self.terrain):
+            for y, val in enumerate(row):
+                posX = y * TILESIZE
+                posY = x * TILESIZE
+
+                # this class creates groups for multiple types of tilesets
+
+                # terrain tileset and the value is not -1
+                if type == "terrain" and val != "-1":
+                    print(posX, posY)
+                    sprite = Terrain(posX, posY, self.terrain_sprite_sheet, int(val))
+                    group.add(sprite)
+        
+        return group
 
     # creating the player
     def create_player(self):
@@ -43,5 +65,6 @@ class Level:
         pass
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
-    def run():
-        pass
+    def run(self):
+        self.terrain_sprites.draw(self.screen)
+        self.terrain_sprites.update(self.shiftX, self.shiftY)

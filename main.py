@@ -12,6 +12,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 myClock = pygame.time.Clock()
 
+# creating instances
 level = Level(screen, lvl1)
 
 while running:

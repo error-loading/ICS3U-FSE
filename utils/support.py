@@ -6,7 +6,7 @@ import json
 def import_sprite_sheet(path, sz, scale=None):
 	imgs = []
 
-	sprite_sheet = pygame.image.load(path).convert_alpha()
+	sprite_sheet = pygame.image.load("assets/terrain/terrain.png").convert_alpha()
 	width = sprite_sheet.get_width()
 	height = sprite_sheet.get_height()
 
