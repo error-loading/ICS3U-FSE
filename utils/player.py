@@ -14,9 +14,10 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 1
         self.scale = (50, 50)
         self.scrollY = 0
-        self.jump_speed = -16
+        self.jump_speed = -19
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 5
+        self.in_air = False
 
         # animations
         self.animation = []
@@ -88,7 +89,8 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
 
         
-        if key[pygame.K_SPACE]:
+        if key[pygame.K_SPACE] and not self.in_air:
+            self.in_air = True
             self.jump()
         
         if not key[pygame.K_RIGHT] and not key[pygame.K_LEFT] and not key[pygame.K_SPACE]:

@@ -17,6 +17,7 @@ class Level:
         self.data = data
         self.shiftX = 0
         self.shiftY = 0
+        self.fruit_count = 0
 
         # terrain
         self.terrain = import_csv(self.data["terrain"])
@@ -117,7 +118,10 @@ class Level:
 
     # fruit collision
     def fruit_collide(self):
-        pass
+        fruits_hit = pygame.sprite.spritecollide(self.player_sprite.sprite, self.fruits_sprites, True, pygame.sprite.collide_mask)
+
+        for fruit in fruits_hit:
+            self.fruit_count += 1
 
     # check for horizontal collision
     def horizonal_collide(self):
@@ -127,7 +131,7 @@ class Level:
 
         for sprite in self.terrain_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
-                # player.in_air = False
+                player.in_air = False
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
                 
@@ -149,7 +153,7 @@ class Level:
 
         for sprite in self.terrain_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
-                # player.in_air = False
+                player.in_air = False
                 if player.direction.y > 0:
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
@@ -180,3 +184,4 @@ class Level:
         # call other stuff
         self.vertical_collide()
         self.horizonal_collide()
+        self.fruit_collide()
