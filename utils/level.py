@@ -2,6 +2,7 @@ import pygame
 from utils.support import import_csv, import_sprite_sheet
 from utils.tiles.terrain import Terrain
 from utils.tiles.spikes import Spikes
+from utils.tiles.falling_trap import FallingTrap
 from constants import *
 
 # keep creating new instances of this class for different levels
@@ -15,7 +16,7 @@ class Level:
 
         # terrain
         self.terrain = import_csv(self.data["terrain"])
-        self.terrain_sprite_sheet = import_sprite_sheet(self.data["terrain"], (16, 16))
+        self.terrain_sprite_sheet = import_sprite_sheet("assets/terrain/terrain.png", (16, 16))
         self.terrain_sprites = self.create_group("terrain")
 
         # traps
@@ -42,7 +43,8 @@ class Level:
                 if type == "traps":
                     # falling trap
                     if self.traps[x][y] == "0":
-                        pass
+                        sprite = FallingTrap(posX, posY)
+                        group.add(sprite)
 
                     # saw trap
                     if self.traps[x][y] == "3":
