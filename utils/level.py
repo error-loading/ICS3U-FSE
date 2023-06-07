@@ -15,7 +15,7 @@ class Level:
         # general info
         self.screen = screen
         self.data = data
-        self.shiftX = -1
+        self.shiftX = 0
         self.shiftY = 0
 
         # terrain
@@ -121,7 +121,18 @@ class Level:
 
     # check for horizontal collision
     def horizonal_collide(self):
-        pass
+        player = self.player_sprite.sprite
+
+        player.rect.x += player.direction.x * player.speed
+
+        for sprite in self.terrain_sprites.sprites():
+            if sprite.rect.colliderect(player.rect):
+                # player.in_air = False
+                if player.direction.x < 0:
+                    player.rect.left = sprite.rect.right
+                
+                elif player.direction.x > 0:
+                    player.rect.right = sprite.rect.left
 
     # call function to reset the level
     def reset(self):
@@ -133,7 +144,19 @@ class Level:
 
     # check for vertical collision
     def vertical_collide(self):
-        pass
+        player = self.player_sprite.sprite 
+        player.get_gravity()
+
+        for sprite in self.terrain_sprites.sprites():
+            if sprite.rect.colliderect(player.rect):
+                # player.in_air = False
+                if player.direction.y > 0:
+                    player.rect.bottom = sprite.rect.top
+                    player.direction.y = 0
+                
+                elif player.direction.y < 0:
+                    player.rect.top = sprite.rect.bottom
+                    player.direction.y = 0
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
     def run(self):
@@ -152,3 +175,8 @@ class Level:
         # fruit sprites draw and update
         self.fruits_sprites.draw(self.screen)
         self.fruits_sprites.update(self.shiftX, self.shiftY)
+
+
+        # call other stuff
+        self.vertical_collide()
+        self.horizonal_collide()

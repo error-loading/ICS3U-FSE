@@ -16,6 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.scrollY = 0
         self.jump_speed = -16
         self.direction = pygame.math.Vector2(0, 0)
+        self.speed = 5
 
         # animations
         self.animation = []
@@ -44,8 +45,14 @@ class Player(pygame.sprite.Sprite):
 
         self.image = self.animation[self.action][int(self.frame_index)]
 
+    # flipping the image
     def flip_img(self):
         self.image = pygame.transform.flip(self.image, self.flip, False)
+
+    # getting gravity
+    def get_gravity(self):
+        self.direction.y += self.gravity
+        self.rect.y += self.direction.y
 
     # getting imgs
     def get_imgs(self):
@@ -79,12 +86,17 @@ class Player(pygame.sprite.Sprite):
             
         else:
             self.direction.x = 0
+
         
         if key[pygame.K_SPACE]:
             self.jump()
         
         if not key[pygame.K_RIGHT] and not key[pygame.K_LEFT] and not key[pygame.K_SPACE]:
             self.update_action(self.IDLE)
+
+    # jump
+    def jump(self):
+        self.direction.y = self.jump_speed
 
     # updating an action
     def update_action(self, val):
