@@ -51,6 +51,7 @@ class Level:
                 if type == "player" and self.player[x][y] == "1":
                     sprite = pygame.sprite.GroupSingle()
 
+                    self.start_pos = (posX, posY)
                     player = Player((posX, posY))
                     sprite.add(player)
 
@@ -142,6 +143,23 @@ class Level:
     def reset(self):
         pass
 
+    # scrolling function
+    def scrollX(self):
+        player = self.player_sprite.sprite
+        posX = player.rect.x
+        
+        if 700 < posX < WIDTH and player.direction.x > 0:
+            player.speed = 0
+            self.shiftX = -5
+        
+        elif 0 < posX < 300 and player.direction.x < 0:
+            player.speed = 0
+            self.shiftX = 5
+
+        else:
+            self.shiftX = 0
+            player.speed = 5
+
     # function for teleporting
     def teleport(self):
         pass
@@ -185,3 +203,4 @@ class Level:
         self.vertical_collide()
         self.horizonal_collide()
         self.fruit_collide()
+        self.scrollX()
