@@ -18,6 +18,7 @@ class Level:
         self.shiftX = 0
         self.shiftY = 0
         self.fruit_count = 0
+        self.player_died = False
 
         # terrain
         self.terrain = import_csv(self.data["terrain"])
@@ -31,14 +32,16 @@ class Level:
 
         # traps
         self.traps = import_csv(self.data["traps"])
-        self.traps_sprites = self.create_group("traps")
+
+        self.falling_trap_sprites = self.create_group("traps", "0")
+        self.spike_sprites = self.create_group("traps", "5")
 
         # fruits
         self.fruits = import_csv(self.data["fruits"])
         self.fruits_sprites = self.create_group("fruits")
 
     # creating the tiles for terrains and collectables
-    def create_group(self, type):
+    def create_group(self, type, trap_type = "-1"):
         group = pygame.sprite.Group()
 
         for x, row in enumerate(self.terrain):
@@ -67,16 +70,16 @@ class Level:
                 # traps tilesets
                 if type == "traps":
                     # falling trap
-                    if self.traps[x][y] == "0":
+                    if self.traps[x][y] == "0" and trap_type == "0":
                         sprite = FallingTrap(posX, posY)
                         group.add(sprite)
 
                     # saw trap
-                    if self.traps[x][y] == "3":
+                    if self.traps[x][y] == "3" and trap_type == "3":
                         pass
 
                     # spikes
-                    if self.traps[x][y] == "5":
+                    if self.traps[x][y] == "5" and trap_type == "5":
                         sprite = Spikes(posX, posY)
                         group.add(sprite)
 
@@ -161,8 +164,18 @@ class Level:
             player.speed = 5
     
     def scrollY(self):
-        player = self.player_sprite.sprite
-        self.shiftY = player.direction.y
+        pass
+        # player = self.player_sprite.sprite
+        # self.shiftY = player.direction.y
+    
+    # spiek collide
+    def spike_collide(self):
+        dead = pygame.sprite.spritecollide(self.player_sprite.sprite, self.spike_sprites, False, pygame.sprite.collide_mask)
+
+        for i in dead:
+            self.player_died = True
+            self.player_sprite.sprite.kill()
+            print("dead")
 
     # function for teleporting
     def teleport(self):
@@ -194,9 +207,13 @@ class Level:
         self.player_sprite.draw(self.screen)
         self.player_sprite.update()
 
-        # trap sprites draw and update
-        self.traps_sprites.draw(self.screen)
-        self.traps_sprites.update(self.shiftX, self.shiftY)
+        # falling trap sprites draw and update
+        self.falling_trap_sprites.draw(self.screen)
+        self.falling_trap_sprites.update(self.shiftX, self.shiftY)
+
+        # spike strap sprites draw and update
+        self.spike_sprites.draw(self.screen)
+        self.spike_sprites.update(self.shiftX, self.shiftY)
 
         # fruit sprites draw and update
         self.fruits_sprites.draw(self.screen)
@@ -204,8 +221,10 @@ class Level:
 
 
         # call other stuff
-        self.vertical_collide()
-        self.horizonal_collide()
-        self.fruit_collide()
-        self.scrollX()
-        self.scrollY()
+        if not self.player_died:
+            self.vertical_collide()
+            self.horizonal_collide()
+            self.fruit_collide()
+            self.scrollX()
+            self.scrollY()
+            self.spike_collide()

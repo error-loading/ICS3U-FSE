@@ -45,6 +45,10 @@ class Player(pygame.sprite.Sprite):
             self.frame_index = 0
 
         self.image = self.animation[self.action][int(self.frame_index)]
+    
+    # died
+    def dead(self):
+        pass
 
     # flipping the image
     def flip_img(self):
@@ -52,11 +56,11 @@ class Player(pygame.sprite.Sprite):
 
     # getting gravity
     def get_gravity(self):
-        if self.in_air:
-            self.direction.y += self.gravity
-        else:
-            self.direction.y = 0
-
+        # if self.in_air:
+        #     self.direction.y += self.gravity
+        # else:
+        #     self.direction.y = 0
+        self.direction.y += self.gravity
         self.rect.y += self.direction.y
 
     # getting imgs
