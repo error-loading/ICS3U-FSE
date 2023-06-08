@@ -5,13 +5,14 @@ from utils.support import import_sprite_sheet
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, char="Virtual Guy"):
+    def __init__(self, pos, screen, char="Virtual Guy"):
         super().__init__()
         self.pos = pos
         self.char = char
+        self.screen = screen
 
         # character stuff
-        self.gravity = 1
+        self.gravity = 0.5
         self.scale = (50, 50)
         self.scrollY = 0
         self.jump_speed = -19
@@ -22,8 +23,13 @@ class Player(pygame.sprite.Sprite):
         # animations
         self.animation = []
         self.flip = False
+
+        # particles
+        self.run_particles = []
+
         self.get_imgs()
 
+        # states
         self.IDLE = 0
         self.JUMP = 1
         self.RUN = 2
@@ -34,6 +40,9 @@ class Player(pygame.sprite.Sprite):
 
         self.frame_index = 0
         self.frame_rate = 0.25
+
+        self.run_frame_index = 0
+        self.run_frame_rate = 0.15
 
         self.image = self.animation[self.action][self.frame_index]
         self.rect = self.image.get_rect(topleft=pos)
@@ -81,6 +90,10 @@ class Player(pygame.sprite.Sprite):
             f"assets/character/{self.char}/fall.png", (32, 32), self.scale)
         hit = import_sprite_sheet(
             f"assets/character/{self.char}/hit.png", (32, 32), self.scale)
+        
+        for i in range(1, 6):
+            img = pygame.image.load(f"assets/items/dust_particles/run/run_{i}.png")
+            self.run_particles.append(img)
 
         self.animation.append(idle)
         self.animation.append(jump)
@@ -117,6 +130,24 @@ class Player(pygame.sprite.Sprite):
     def jump(self):
         self.direction.y = self.jump_speed
 
+    # run animations
+    def run_animations(self):
+        if self.action == self.RUN and not self.in_air:
+            self.run_frame_index += self.run_frame_rate
+
+            if self.run_frame_index >= len(self.run_particles):
+                self.run_frame_index = 0
+            
+            dust_particle = self.run_particles[int(self.run_frame_index)]
+
+            if self.direction.x > 0:
+                pos = self.rect.bottomleft - pygame.math.Vector2(6, 10)
+                self.screen.blit(dust_particle, pos)
+            
+            elif self.direction.x < 0:
+                pos = self.rect.bottomright - pygame.math.Vector2(6, 10)
+                self.screen.blit(dust_particle, pos)
+
     # updating an action
     def update_action(self, val):
         if val != self.action:
@@ -130,3 +161,4 @@ class Player(pygame.sprite.Sprite):
         self.get_gravity()
         self.animate()
         self.flip_img()
+        self.run_animations()

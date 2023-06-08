@@ -50,14 +50,13 @@ class Level:
             for y, val in enumerate(row):
                 posX = y * TILESIZE
                 posY = x * TILESIZE
-
                 # this class creates groups for multiple types of tilesets
 
                 if type == "player" and self.player[x][y] == "1":
                     sprite = pygame.sprite.GroupSingle()
 
                     self.start_pos = (posX, posY)
-                    player = Player((posX, posY))
+                    player = Player((posX, posY), screen =  self.screen)
                     sprite.add(player)
 
                     return sprite
@@ -78,7 +77,7 @@ class Level:
 
                     # saw trap
                     if self.traps[x][y] == "3" and trap_type == "3":
-                        sprite = Saw_Trap(posX, posY)
+                        sprite = Saw_Trap(posX, posY, self.terrain)
                         group.add(sprite)
 
                     # spikes
@@ -234,6 +233,9 @@ class Level:
         # fruit sprites draw and update
         self.fruits_sprites.draw(self.screen)
         self.fruits_sprites.update(self.shiftX, self.shiftY)
+
+
+        pygame.draw.rect(self.screen, RED, (25 * TILESIZE, 47 * TILESIZE, TILESIZE, TILESIZE))
 
 
         # call other stuff
