@@ -28,6 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.JUMP = 1
         self.RUN = 2
         self.FALL = 3
+        self.HIT = 4
 
         self.action = 0
 
@@ -42,13 +43,18 @@ class Player(pygame.sprite.Sprite):
         self.frame_index += self.frame_rate
 
         if self.frame_index >= len(self.animation[self.action]):
-            self.frame_index = 0
+            if self.action == self.HIT:
+                self.frame_index = len(self.animation[self.action]) - 1
+            
+            else:
+                self.frame_index = 0
 
         self.image = self.animation[self.action][int(self.frame_index)]
     
     # died
     def dead(self):
-        pass
+        self.jump()
+        self.update_action(self.HIT)
 
     # flipping the image
     def flip_img(self):
@@ -73,11 +79,14 @@ class Player(pygame.sprite.Sprite):
             f"assets/character/{self.char}/run.png", (32, 32), self.scale)
         fall = import_sprite_sheet(
             f"assets/character/{self.char}/fall.png", (32, 32), self.scale)
+        hit = import_sprite_sheet(
+            f"assets/character/{self.char}/hit.png", (32, 32), self.scale)
 
         self.animation.append(idle)
         self.animation.append(jump)
         self.animation.append(run)
         self.animation.append(fall)
+        self.animation.append(hit)
 
     # getting input from the user
     def get_input(self):
@@ -118,5 +127,6 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.get_input()
+        self.get_gravity()
         self.animate()
         self.flip_img()

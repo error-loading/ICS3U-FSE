@@ -174,9 +174,9 @@ class Level:
 
         for i in dead:
             self.player_died = True
-            self.player_sprite.sprite.kill()
-            print("dead")
-
+            self.player_sprite.sprite.dead()
+            self.reset()
+        
     # function for teleporting
     def teleport(self):
         pass
@@ -224,7 +224,8 @@ class Level:
         if not self.player_died:
             self.vertical_collide()
             self.horizonal_collide()
-            self.fruit_collide()
-            self.scrollX()
-            self.scrollY()
             self.spike_collide()
+
+        self.fruit_collide()
+        self.scrollX()
+        self.scrollY()
