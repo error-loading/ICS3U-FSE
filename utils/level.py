@@ -149,6 +149,15 @@ class Level:
     def reset(self):
         pass
 
+    # saw trap collide
+    def saw_trap_collide(self):
+        dead = pygame.sprite.spritecollide(self.player_sprite.sprite, self.saw_trap_sprites, False, pygame.sprite.collide_mask)
+
+        for i in dead:
+            self.player_died = True
+            self.player_sprite.sprite.dead()
+            self.reset()
+
     # scrolling function
     def scrollX(self):
         player = self.player_sprite.sprite
@@ -232,6 +241,7 @@ class Level:
             self.vertical_collide()
             self.horizonal_collide()
             self.spike_collide()
+            self.saw_trap_collide()
 
         self.fruit_collide()
         self.scrollX()

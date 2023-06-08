@@ -11,10 +11,16 @@ class Saw_Trap(pygame.sprite.Sprite):
         self.frame_index = 0
         self.frame_rate = 0.25
 
+        # direction/speed
+        self.direction = pygame.math.Vector2(2, 0)
+
         self.animations = import_sprite_sheet("assets/traps/Saw/On (38x38).png", (38, 38))
         self.image = self.animations[self.frame_index]
         self.rect = self.image.get_rect(centerx = posX, centery = posY)
     
+    def move(self):
+        self.rect.center += self.direction
+
     def animate(self):
         self.frame_index += self.frame_rate
         
@@ -28,3 +34,4 @@ class Saw_Trap(pygame.sprite.Sprite):
         self.rect.centery += shiftY
 
         self.animate()
+        self.move()
