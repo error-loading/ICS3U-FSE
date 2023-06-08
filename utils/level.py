@@ -4,6 +4,7 @@ from utils.tiles.terrain import Terrain
 from utils.tiles.spikes import Spikes
 from utils.tiles.fruits import Apple, Banana, Cherry, Stawberry, Pineapple
 from utils.tiles.falling_trap import FallingTrap
+from utils.tiles.saw_trap import Saw_Trap
 from utils.player import Player
 from constants import *
 
@@ -34,6 +35,7 @@ class Level:
         self.traps = import_csv(self.data["traps"])
 
         self.falling_trap_sprites = self.create_group("traps", "0")
+        self.saw_trap_sprites = self.create_group("traps", "3")
         self.spike_sprites = self.create_group("traps", "5")
 
         # fruits
@@ -76,7 +78,8 @@ class Level:
 
                     # saw trap
                     if self.traps[x][y] == "3" and trap_type == "3":
-                        pass
+                        sprite = Saw_Trap(posX, posY)
+                        group.add(sprite)
 
                     # spikes
                     if self.traps[x][y] == "5" and trap_type == "5":
@@ -199,6 +202,10 @@ class Level:
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
     def run(self):
+        # saw trap draw and update
+        self.saw_trap_sprites.draw(self.screen)
+        self.saw_trap_sprites.update(self.shiftX, self.shiftY)
+
         # terrain sprites draw and update
         self.terrain_sprites.draw(self.screen)
         self.terrain_sprites.update(self.shiftX, self.shiftY)
