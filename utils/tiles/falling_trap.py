@@ -18,6 +18,8 @@ class FallingTrap(pygame.sprite.Sprite):
         self.image = self.collection[0]
         self.rect = self.image.get_rect(topleft = (posX, posY))
 
+        self.dead = False
+
     def animate(self):
         self.frame_index += self.frame_rate
         self.frame_index %= len(self.collection)
@@ -26,14 +28,17 @@ class FallingTrap(pygame.sprite.Sprite):
     
     def destroy(self):
         self.frame_rate = 0
-        self.image = pygame.image.load("assets/traps/falling/Off.png").convert_alpha()
+        self.collection = [pygame.image.load("assets/traps/falling/Off.png").convert_alpha()]
         self.rect.y += self.gravity
 
-        if self.rect.y < HEIGHT:
+        if self.rect.y > HEIGHT:
             self.kill()
 
     def update(self, shiftX, shiftY):
         self.rect.centerx += shiftX
         self.rect.centery += shiftY
 
-        self.animate()
+        if not self.dead:
+            self.animate()
+        else:
+            self.destroy()

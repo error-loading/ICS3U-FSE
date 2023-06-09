@@ -163,6 +163,8 @@ class Level:
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
 
+                sprite.dead = True
+
     # call function to reset the level
     def reset(self):
         pass
@@ -237,6 +239,8 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
+
+                sprite.dead = True
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
     def run(self):
