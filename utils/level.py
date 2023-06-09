@@ -5,6 +5,7 @@ from utils.tiles.spikes import Spikes
 from utils.tiles.fruits import Apple, Banana, Cherry, Stawberry, Pineapple
 from utils.tiles.falling_trap import FallingTrap
 from utils.tiles.saw_trap import Saw_Trap
+from utils.particles import Particles
 from utils.player import Player
 from constants import *
 
@@ -42,6 +43,9 @@ class Level:
         self.fruits = import_csv(self.data["fruits"])
         self.fruits_sprites = self.create_group("fruits")
 
+        # particle
+        self.dust_sprite = pygame.sprite.GroupSingle()
+
     # creating the tiles for terrains and collectables
     def create_group(self, type, trap_type = "-1"):
         group = pygame.sprite.Group()
@@ -56,7 +60,7 @@ class Level:
                     sprite = pygame.sprite.GroupSingle()
 
                     self.start_pos = (posX, posY)
-                    player = Player((posX, posY), screen =  self.screen)
+                    player = Player((posX, posY), self.screen, self.create_particles)
                     sprite.add(player)
 
                     return sprite
@@ -117,6 +121,12 @@ class Level:
     # creating the player
     def create_player(self):
         pass
+
+    # creating particles
+    def create_particles(self, pos):
+        sprite = Particles(pos)
+        self.dust_sprite.add(sprite)
+
 
     # method is called to check if game is over
     def check_game_over(self):
@@ -234,9 +244,11 @@ class Level:
         self.fruits_sprites.draw(self.screen)
         self.fruits_sprites.update(self.shiftX, self.shiftY)
 
+        # dust sprites draw and update
+        self.dust_sprite.draw(self.screen)
+        self.dust_sprite.update(self.shiftX)
 
-        pygame.draw.rect(self.screen, RED, (25 * TILESIZE, 47 * TILESIZE, TILESIZE, TILESIZE))
-
+ 
 
         # call other stuff
         if not self.player_died:

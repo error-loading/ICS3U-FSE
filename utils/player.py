@@ -1,15 +1,17 @@
 import pygame
 from utils.support import import_sprite_sheet
+from utils.particles import Particles
 
 # class for the player, all the functionality of the player will be here
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, screen, char="Virtual Guy"):
+    def __init__(self, pos, screen, create_particles, char="Virtual Guy"):
         super().__init__()
         self.pos = pos
         self.char = char
         self.screen = screen
+        self.create_particles = create_particles
 
         # character stuff
         self.gravity = 0.5
@@ -128,6 +130,7 @@ class Player(pygame.sprite.Sprite):
 
     # jump
     def jump(self):
+        self.create_particles(self.rect.midbottom)
         self.direction.y = self.jump_speed
 
     # run animations
