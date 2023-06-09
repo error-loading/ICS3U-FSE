@@ -154,6 +154,15 @@ class Level:
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
 
+        for sprite in self.falling_trap_sprites.sprites():
+            if sprite.rect.colliderect(player.rect):
+                player.in_air = False
+                if player.direction.x < 0:
+                    player.rect.left = sprite.rect.right
+                
+                elif player.direction.x > 0:
+                    player.rect.right = sprite.rect.left
+
     # call function to reset the level
     def reset(self):
         pass
@@ -208,6 +217,17 @@ class Level:
         player.get_gravity()
 
         for sprite in self.terrain_sprites.sprites():
+            if sprite.rect.colliderect(player.rect):
+                player.in_air = False
+                if player.direction.y > 0:
+                    player.rect.bottom = sprite.rect.top
+                    player.direction.y = 0
+                
+                elif player.direction.y < 0:
+                    player.rect.top = sprite.rect.bottom
+                    player.direction.y = 0
+
+        for sprite in self.falling_trap_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
                 player.in_air = False
                 if player.direction.y > 0:

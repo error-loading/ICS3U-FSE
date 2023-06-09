@@ -3,8 +3,6 @@ from utils.support import import_sprite_sheet
 from utils.particles import Particles
 
 # class for the player, all the functionality of the player will be here
-
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, screen, create_particles, char="Virtual Guy"):
         super().__init__()
