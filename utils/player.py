@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 0.5
         self.scale = (50, 50)
         self.scrollY = 0
-        self.jump_speed = -19
+        self.jump_speed = -16
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 5
         self.in_air = True
@@ -45,7 +45,7 @@ class Player(pygame.sprite.Sprite):
         self.run_frame_rate = 0.15
 
         self.image = self.animation[self.action][self.frame_index]
-        self.rect = self.image.get_rect(topleft=pos)
+        self.rect = self.image.get_rect(topleft=(pos[0] - self.image.get_width() // 2, pos[1]))
 
     # animating
     def animate(self):

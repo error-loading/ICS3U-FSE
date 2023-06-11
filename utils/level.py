@@ -6,6 +6,7 @@ from utils.tiles.fruits import Apple, Banana, Cherry, Stawberry, Pineapple
 from utils.tiles.falling_trap import FallingTrap
 from utils.tiles.saw_trap import Saw_Trap
 from utils.particles import Particles
+from utils.teleport import Teleport, Portal
 from utils.player import Player
 from constants import *
 
@@ -21,12 +22,17 @@ class Level:
         self.shiftY = 0
         self.fruit_count = 0
         self.player_died = False
+        self.player_cnt = 0
 
         # terrain
         self.terrain = import_csv(self.data["terrain"])
         self.terrain_sprite_sheet = import_sprite_sheet(
             "assets/terrain/terrain.png", (16, 16))
         self.terrain_sprites = self.create_group("terrain")
+
+        # teleport
+        self.teleport_sprite = pygame.sprite.GroupSingle()
+        self.portal_sprite = pygame.sprite.GroupSingle()
 
         # player
         self.player = import_csv(self.data["player"])
@@ -46,6 +52,7 @@ class Level:
         # particle
         self.dust_sprite = pygame.sprite.GroupSingle()
 
+
     # creating the tiles for terrains and collectables
     def create_group(self, type, trap_type = "-1"):
         group = pygame.sprite.Group()
@@ -62,6 +69,12 @@ class Level:
                     self.start_pos = (posX, posY)
                     player = Player((posX, posY), self.screen, self.create_particles)
                     sprite.add(player)
+
+                    portal = Portal(posX, posY)
+                    self.portal_sprite.add(portal)
+
+                    teleport = Teleport(posX, posY, portal)
+                    self.teleport_sprite.add(teleport)
 
                     return sprite
 
@@ -216,7 +229,9 @@ class Level:
     # check for vertical collision
     def vertical_collide(self):
         player = self.player_sprite.sprite 
-        player.get_gravity()
+
+        if self.player_cnt > 60:
+            player.get_gravity()
 
         for sprite in self.terrain_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
@@ -244,6 +259,19 @@ class Level:
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
     def run(self):
+
+        # dust sprites draw and update
+        self.dust_sprite.draw(self.screen)
+        self.dust_sprite.update(self.shiftX)
+
+        self.portal_sprite.draw(self.screen)
+        self.portal_sprite.update(self.shiftX)
+
+
+        # teleport draw and update
+        self.teleport_sprite.draw(self.screen)
+        self.teleport_sprite.update(self.shiftX)
+
         # saw trap draw and update
         self.saw_trap_sprites.draw(self.screen)
         self.saw_trap_sprites.update(self.shiftX, self.shiftY)
@@ -253,8 +281,9 @@ class Level:
         self.terrain_sprites.update(self.shiftX, self.shiftY)
 
         # player sprites draw and update
-        self.player_sprite.draw(self.screen)
-        self.player_sprite.update()
+        if self.player_cnt > 60:
+            self.player_sprite.draw(self.screen)
+            self.player_sprite.update()
 
         # falling trap sprites draw and update
         self.falling_trap_sprites.draw(self.screen)
@@ -268,9 +297,6 @@ class Level:
         self.fruits_sprites.draw(self.screen)
         self.fruits_sprites.update(self.shiftX, self.shiftY)
 
-        # dust sprites draw and update
-        self.dust_sprite.draw(self.screen)
-        self.dust_sprite.update(self.shiftX)
 
  
 
@@ -284,3 +310,4 @@ class Level:
         self.fruit_collide()
         self.scrollX()
         self.scrollY()
+        self.player_cnt += 1
