@@ -12,10 +12,10 @@ class Player(pygame.sprite.Sprite):
         self.create_particles = create_particles
 
         # character stuff
-        self.gravity = 0.5
+        self.gravity = 0.3
         self.scale = (50, 50)
         self.scrollY = 0
-        self.jump_speed = -16
+        self.jump_speed = -10
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 5
         self.in_air = True
