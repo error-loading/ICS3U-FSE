@@ -42,7 +42,19 @@ class TeleportAway(Teleport):
     def __init__(self, posX, posY, portal, player):
         super().__init__(posX, posY, portal)
         self.player = player
-        self.animations = import_sprite_sheet("assets/character/Desappearing (96x96).png")
+        self.portal = portal
+        self.animations = import_sprite_sheet("assets/character/Desappearing (96x96).png", (96, 96))
+    
+    def animate(self):
+        self.frame_index += self.frame_rate
+
+        if self.frame_index >= len(self.animations):
+            # self.player.sprite.kill()
+            self.portal.sprite.kill()
+            self.kill()
+        
+        else:
+            self.image = self.animations[int(self.frame_index)]
     
     def check_collision(self):
         return pygame.sprite.collide_circle(self.player.sprite, self.portal.sprite)

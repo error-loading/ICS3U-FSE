@@ -5,11 +5,14 @@ from constants import *
 from math import floor
 
 class Saw_Trap(pygame.sprite.Sprite):
-    def __init__(self, posX, posY, terrain):
+    def __init__(self, posX, posY, x, y, terrain, limit_sprites):
         super().__init__()
         self.posX = posX
         self.posY = posY
+        self.x = x
+        self.y = y
         self.terrain = terrain
+        self.limit = limit_sprites
 
         # frame stuff
         self.frame_index = 0
@@ -30,33 +33,42 @@ class Saw_Trap(pygame.sprite.Sprite):
         
         self.image = self.animations[int(self.frame_index)]
     
+    def switch(self):
+        self.direction.x *= -1
+    
     def check_pos(self):
-        y = floor(self.rect.bottomleft[0] / TILESIZE)
-        x = floor(self.rect.bottomleft[1] / TILESIZE)
+        x = self.x
+        y = self.y
 
-        # check if the saw is in top row
-        if self.terrain[x][y-1] == "-1":
-            # top right
-            if self.terrain[x+1][y] == "-1":
-                self.direction.x = 1
-                self.direction.y = 0
+        # # check if the saw is in top row
+        # if self.terrain[x][y-1] == "-1":
+        #     # top right
+        #     if self.terrain[x+1][y] == "-1":
+        #         self.direction.x = 1
+        #         self.direction.y = 0
             
-            # top left
-            elif self.terrain[x-1][y] == "-1":
-                self.direction.x = 1
-                self.direction.y = 0
+        #     # top left
+        #     elif self.terrain[x-1][y] == "-1":
+        #         self.direction.x = 1
+        #         self.direction.y = 0
         
-        # check it is in bottom row
-        elif self.terrain[x][y+1] == "-1":
-            # bottom right
-            if self.terrain[x+1][y] == "-1":
-                self.direction.x = -1
-                self.direction.y = 0
+        # # check it is in bottom row
+        # elif self.terrain[x][y+1] == "-1":
+        #     # bottom right
+        #     if self.terrain[x+1][y] == "-1":
+        #         self.direction.x = -1
+        #         self.direction.y = 0
             
-            # bottom left
-            if self.terrain[x-1][y] == "-1":
-                self.direction.x = 0
-                self.direction.y = -1
+        #     # bottom left
+        #     if self.terrain[x-1][y] == "-1":
+        #         self.direction.x = 0
+        #         self.direction.y = -1
+    
+        # left bound
+        # if self.limit[x][y] == 0:
+        #     self.direction.x *= -1
+
+
 
     def move(self):
         self.rect.center += self.direction
@@ -64,6 +76,9 @@ class Saw_Trap(pygame.sprite.Sprite):
     def update(self, shiftX, shiftY):
         self.rect.centerx += shiftX
         self.rect.centery += shiftY
+
+        self.x += (self.rect.x - self.x * TILESIZE) // TILESIZE
+        self.y += (self.rect.y - self.y * TILESIZE) // TILESIZE
 
         self.check_pos()
         self.animate()

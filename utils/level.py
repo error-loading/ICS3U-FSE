@@ -8,6 +8,7 @@ from utils.tiles.saw_trap import Saw_Trap
 from utils.particles import Particles
 from utils.teleport import Teleport, Portal, TeleportAway
 from utils.player import Player
+from utils.tiles.limits import Limit
 from constants import *
 
 # keep creating new instances of this class for different levels
@@ -22,6 +23,7 @@ class Level:
         self.shiftY = 0
         self.fruit_count = 0
         self.player_died = False
+        self.lvl_completed = False
         self.player_cnt = 0
 
         # terrain
@@ -30,11 +32,15 @@ class Level:
             "assets/terrain/terrain.png", (16, 16))
         self.terrain_sprites = self.create_group("terrain")
 
+        # limits
+        self.limits = import_csv(self.data["limits"])
+        self.limits_sprites = self.create_group(type = "limit")
+
         # teleport
         self.teleport_sprite = pygame.sprite.GroupSingle()
         self.portal_sprite_end = pygame.sprite.GroupSingle()
-        self.teleport_sprite_end = pygame.sprite.GroupSingle()
         self.portal_sprite = pygame.sprite.GroupSingle()
+        self.teleport_sprite_end = pygame.sprite.GroupSingle()
 
         # player
         self.player = import_csv(self.data["player"])
@@ -66,34 +72,35 @@ class Level:
                 # this class creates groups for multiple types of tilesets
 
                 if type == "player" and self.player[x][y] == "1":
-                    sprite = pygame.sprite.GroupSingle()
+                    group = pygame.sprite.GroupSingle()
 
                     self.start_pos = (posX, posY)
                     player = Player((posX, posY), self.screen, self.create_particles)
-                    sprite.add(player)
+                    group.add(player)
 
                     portal = Portal(posX, posY)
                     self.portal_sprite.add(portal)
 
                     teleport = Teleport(posX, posY, portal)
+
+                    self.player_sprite = group
                     self.teleport_sprite.add(teleport)
 
-                    return sprite
+
+                
+                if type == "player" and self.player[x][y] == "2":
+                    portal = Portal(posX, posY)
+                    self.portal_sprite_end.add(portal)
+
+                    teleport = TeleportAway(posX, posY, self.portal_sprite_end, self.player_sprite)
+                    self.teleport_sprite_end.add(teleport)
+
+                # limits
+                if type == "limit" and self.limits[x][y] == "0":
+                    sprite = Limit(posX, posY, self.screen)
+                    group.add(sprite)
                     
 
-
-            
-                if type == "player" and self.player[x][y] == "2":
-                    pass
-                    # sprite = pygame.sprite.GroupSingle()
-
-                    # self.start_pos = (posX, posY)
-
-                    # portal = Portal(posX, posY)
-                    # self.portal_sprite_end.add(portal)
-
-                    # teleport = TeleportAway(posX, posY, portal, self.player_sprite)
-                    # self.teleport_sprite_end.add(teleport)
 
 
                 # terrain tileset and the value is not -1
@@ -111,7 +118,7 @@ class Level:
 
                     # saw trap
                     if self.traps[x][y] == "3" and trap_type == "3":
-                        sprite = Saw_Trap(posX, posY, self.terrain)
+                        sprite = Saw_Trap(posX, posY, x, y, self.terrain, self.limits_sprites)
                         group.add(sprite)
 
                     # spikes
@@ -160,7 +167,8 @@ class Level:
 
     # method is called to check if game is over
     def check_game_over(self):
-        pass
+        if self.teleport_sprite_end.sprite.check_collision():
+            self.lvl_completed = True
 
     # fruit collision
     def fruit_collide(self):
@@ -201,6 +209,11 @@ class Level:
 
     # saw trap collide
     def saw_trap_collide(self):
+        for sprite in self.limits_sprites:
+            for saw in self.saw_trap_sprites:
+                if pygame.sprite.collide_mask(sprite, saw):
+                    saw.switch()
+
         dead = pygame.sprite.spritecollide(self.player_sprite.sprite, self.saw_trap_sprites, False, pygame.sprite.collide_mask)
 
         for i in dead:
@@ -276,31 +289,37 @@ class Level:
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
     def run(self):
+        # limits sprites 
+        self.limits_sprites.draw(self.screen)
+        self.limits_sprites.update(self.shiftX, self.shiftY)
 
         # dust sprites draw and update
         self.dust_sprite.draw(self.screen)
         self.dust_sprite.update(self.shiftX)
 
+        # WOW, this is a portal sprite, prolly not what u expected !! this is def not being written by Kevin Lu
         self.portal_sprite.draw(self.screen)
         self.portal_sprite.update(self.shiftX)
 
+        # portal_sprite_end
+        self.portal_sprite_end.draw(self.screen)
+        self.portal_sprite_end.update(self.shiftX)
 
         # teleport draw and update
+        self.teleport_sprite.draw(self.screen)
+        self.teleport_sprite.update(self.shiftX)
+
+        # teleport_sprite_end
         self.teleport_sprite_end.draw(self.screen)
         self.teleport_sprite_end.update(self.shiftX)
 
         # saw trap draw and update
         self.saw_trap_sprites.draw(self.screen)
-        self.saw_trap_sprites.update(self.shiftX, self.shiftY)
 
         # terrain sprites draw and update
         self.terrain_sprites.draw(self.screen)
         self.terrain_sprites.update(self.shiftX, self.shiftY)
 
-        # player sprites draw and update
-        if self.player_cnt > 60:
-            self.player_sprite.draw(self.screen)
-            self.player_sprite.update()
 
         # falling trap sprites draw and update
         self.falling_trap_sprites.draw(self.screen)
@@ -309,6 +328,11 @@ class Level:
         # spike strap sprites draw and update
         self.spike_sprites.draw(self.screen)
         self.spike_sprites.update(self.shiftX, self.shiftY)
+
+        # player sprites draw and update
+        if self.player_cnt > 60:
+            self.player_sprite.draw(self.screen)
+            self.player_sprite.update()
 
         # fruit sprites draw and update
         self.fruits_sprites.draw(self.screen)
@@ -323,6 +347,7 @@ class Level:
             self.horizonal_collide()
             self.spike_collide()
             self.saw_trap_collide()
+            self.saw_trap_sprites.update(self.shiftX, self.shiftY)
 
         self.fruit_collide()
         self.scrollX()
