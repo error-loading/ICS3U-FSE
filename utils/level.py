@@ -6,7 +6,7 @@ from utils.tiles.fruits import Apple, Banana, Cherry, Stawberry, Pineapple
 from utils.tiles.falling_trap import FallingTrap
 from utils.tiles.saw_trap import Saw_Trap
 from utils.particles import Particles
-from utils.teleport import Teleport, Portal
+from utils.teleport import Teleport, Portal, TeleportAway
 from utils.player import Player
 from utils.tiles.limits import Limit
 from constants import *
@@ -37,6 +37,8 @@ class Level:
 
         # teleport
         self.teleport_sprite = pygame.sprite.GroupSingle()
+        self.portal_sprite_end = pygame.sprite.GroupSingle()
+        self.teleport_sprite_end = pygame.sprite.GroupSingle()
         self.portal_sprite = pygame.sprite.GroupSingle()
 
         # player
@@ -69,7 +71,7 @@ class Level:
                 # this class creates groups for multiple types of tilesets
 
                 if type == "player" and self.player[x][y] == "1":
-                    sprite = pygame.sprite.GroupSingle()
+                    group = pygame.sprite.GroupSingle()
 
                     self.start_pos = (posX, posY)
                     player = Player((posX, posY), self.screen, self.create_particles)
@@ -81,7 +83,19 @@ class Level:
                     teleport = Teleport(posX, posY, portal)
                     self.teleport_sprite.add(teleport)
 
-                    return sprite
+                    self.player_sprite = group
+
+            
+                if type == "player" and self.player[x][y] == "2":
+                    sprite = pygame.sprite.GroupSingle()
+
+                    self.start_pos = (posX, posY)
+
+                    portal = Portal(posX, posY)
+                    self.portal_sprite_end.add(portal)
+
+                    teleport = TeleportAway(posX, posY, portal, self.player_sprite)
+                    self.teleport_sprite_end.add(teleport)
 
                 # limits
                 if type == "limit" and self.limits[x][y] == "0":
@@ -285,13 +299,17 @@ class Level:
         self.dust_sprite.draw(self.screen)
         self.dust_sprite.update(self.shiftX)
 
-        # WOW, this is a portal sprite, prolly not what u expected !! this is def not being written by Kevin Lu
+        # This is a portal sprite. WOW! Probably not what you expected.
         self.portal_sprite.draw(self.screen)
         self.portal_sprite.update(self.shiftX)
 
+        # This is a portal sprite. WOW! Probably not what you expected.
+        self.portal_sprite_end.draw(self.screen)
+        self.portal_sprite_end.update(self.shiftX)
+
         # teleport draw and update
-        self.teleport_sprite.draw(self.screen)
-        self.teleport_sprite.update(self.shiftX)
+        self.teleport_sprite_end.draw(self.screen)
+        self.teleport_sprite_end.update(self.shiftX)
 
         # saw trap draw and update
         self.saw_trap_sprites.draw(self.screen)

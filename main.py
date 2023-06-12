@@ -26,7 +26,7 @@ while running:
     # run instances here
     level.run()
 
-    myClock.tick(60)
+    myClock.tick(50)
     pygame.display.update() 
 
 

@@ -38,6 +38,23 @@ class Teleport(pygame.sprite.Sprite):
 
         self.rect.x += shiftX
 
+class TeleportAway(Teleport):
+    def __init__(self, posX, posY, portal, player):
+        super().__init__(posX, posY, portal)
+        self.player = player
+        self.animations = import_sprite_sheet("assets/character/Desappearing (96x96).png")
+    
+    def check_collision(self):
+        return pygame.sprite.collide_circle(self.player.sprite, self.portal.sprite)
+
+    def update(self, shiftX):
+        if self.check_collision():
+            self.animate()
+            
+        self.rect.x += shiftX
+
+
+
 class Portal(pygame.sprite.Sprite):
     def __init__(self, posX, posY):
         super().__init__()
