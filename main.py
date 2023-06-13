@@ -3,6 +3,7 @@ import sys
 
 from constants import *
 from utils.level import Level
+from utils.overworld import Overworld
 from game_data import lvl1
 
 pygame.init()
@@ -15,6 +16,8 @@ myClock = pygame.time.Clock()
 # creating instances
 level = Level(screen, lvl1)
 
+overworld = Overworld(screen)
+
 while running:
     for event in pygame.event.get():
         # quit game
@@ -24,7 +27,7 @@ while running:
     screen.fill(GRAY)
 
     # run instances here
-    level.run()
+    overworld.run()
 
     myClock.tick(50)
     pygame.display.update() 

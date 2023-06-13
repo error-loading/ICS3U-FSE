@@ -11,8 +11,3 @@ class Terrain(pygame.sprite.Sprite):
 
         self.image = self.tiles[val]
         self.rect = self.image.get_rect(topleft = (posX, posY))
-
-
-    def update(self, shiftX, shiftY):
-        self.rect.centerx += shiftX
-        self.rect.centery += shiftY
