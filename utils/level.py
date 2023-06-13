@@ -26,6 +26,13 @@ class Level:
         self.lvl_completed = False
         self.player_cnt = 0
 
+        # background
+        self.background_img = pygame.image.load(f"assets/bg/{self.data['bg_col']}.png").convert_alpha()
+        self.background_img = pygame.transform.scale(self.background_img, (WIDTH, HEIGHT))
+        self.background_img2 = pygame.image.load(f"assets/bg/{self.data['bg_col']}.png").convert_alpha()
+        self.background_img2 = pygame.transform.scale(self.background_img, (WIDTH, HEIGHT))
+        self.bg_y = 0
+
         # terrain
         self.terrain = import_csv(self.data["terrain"])
         self.terrain_sprite_sheet = import_sprite_sheet(
@@ -221,6 +228,13 @@ class Level:
             self.player_sprite.sprite.dead()
             self.reset()
 
+    def scrolling_background(self):
+        self.screen.blit(self.background_img, (0, self.bg_y))
+        self.screen.blit(self.background_img2, (0, self.bg_y - HEIGHT))
+        self.bg_y += 1
+
+        if self.bg_y > HEIGHT:
+            self.bg_y = 0
     # scrolling function
     def scrollX(self):
         player = self.player_sprite.sprite
@@ -289,6 +303,7 @@ class Level:
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
     def run(self):
+        self.scrolling_background()
         # limits sprites 
         self.limits_sprites.draw(self.screen)
         self.limits_sprites.update(self.shiftX, self.shiftY)
