@@ -18,6 +18,11 @@ class Overworld:
         self.limit_csv = import_csv("levels/overworld/overworld_contraints.csv")
         self.limit_sprites = self.create_group("limit")
 
+        self.lvl1_sprites = self.create_group("lvl1")
+        self.lvl2_sprites = self.create_group("lvl2")
+
+        self.lvl_sprites = [self.lvl1_sprites, self.lvl2_sprites]
+
         self.water_csv = import_csv("levels/overworld/overworld_water.csv")
         self.water_imgs = import_sprite_sheet("assets/overworld/water.png", (16, 16), (32, 32))
         self.water_sprites = self.create_group("water")
@@ -39,6 +44,7 @@ class Overworld:
 
         self.player_csv = import_csv("levels/overworld/overworld_floor.csv")
         self.player_sprites = self.create_group("player")
+
 
     def create_group(self, type):
         group = pygame.sprite.Group()
@@ -74,12 +80,22 @@ class Overworld:
                 
                 elif type == "player" and self.player_csv[x][y] == "1":
                     group = pygame.sprite.GroupSingle()
-                    sprite = Player((posX, posY), self.screen, self.limit_sprites)
+                    sprite = Player((posX, posY), self.screen, self.limit_sprites, self.lvl_sprites)
                     group.add(sprite)
                     return group
 
                 elif type == "limit":
                     if self.limit_csv[x][y] == "-1":
+                        sprite = Terrain(posX, posY, self.house_imgs, 5)
+                        group.add(sprite)
+                
+                elif type == "lvl1":
+                    if self.limit_csv[x][y] == "104":
+                        sprite = Terrain(posX, posY, self.house_imgs, 5)
+                        group.add(sprite)
+
+                elif type == "lvl2":
+                    if self.limit_csv[x][y] == "105":
                         sprite = Terrain(posX, posY, self.house_imgs, 5)
                         group.add(sprite)
                 

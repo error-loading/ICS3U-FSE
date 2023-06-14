@@ -1,15 +1,17 @@
 import pygame
 from utils.support import import_sprite_sheet
 from utils.particles import Particles
+from config import config
 
 # class for the player, all the functionality of the player will be here
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, screen, limit, char="Samurai"):
+    def __init__(self, pos, screen, limit, lvls, char="Samurai"):
         super().__init__()
         self.pos = pos
         self.char = char
         self.screen = screen
         self.limit = limit
+        self.lvls = lvls
 
         # character stuff
         self.scale = (32, 32)
@@ -74,7 +76,11 @@ class Player(pygame.sprite.Sprite):
                         self.rect.top = sprite.rect.bottom
             
 
-        
+    def check_lvl_collision(self):
+        for i in range(1, len(self.lvls)):
+            for sprite in self.lvls[i - 1]:
+                if sprite.rect.colliderect(self.rect):
+                    config.state = f"lvl{i}"
         
 
     # flipping the image
@@ -160,4 +166,5 @@ class Player(pygame.sprite.Sprite):
         self.get_input()
         self.animate()
         self.move(self.speed)
+        self.check_lvl_collision()
         self.flip_img()
