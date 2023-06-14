@@ -24,12 +24,12 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill(GRAY)
+    screen.fill(BLUE)
 
     # run instances here
     overworld.run()
 
-    myClock.tick(50)
+    myClock.tick(60)
     pygame.display.update() 
 
 

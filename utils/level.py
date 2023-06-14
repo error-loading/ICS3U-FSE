@@ -43,6 +43,8 @@ class Level:
         self.limits = import_csv(self.data["limits"])
         self.limits_sprites = self.create_group(type = "limit")
 
+        test = pygame.sprite.Group()
+
         # teleport
         self.teleport_sprite = pygame.sprite.GroupSingle()
         self.portal_sprite_end = pygame.sprite.GroupSingle()
