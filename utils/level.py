@@ -76,6 +76,7 @@ class Level:
 
         for x, row in enumerate(self.terrain):
             for y, val in enumerate(row):
+
                 posX = y * TILESIZE
                 posY = x * TILESIZE
                 # this class creates groups for multiple types of tilesets
@@ -197,9 +198,11 @@ class Level:
                 # player.in_air = False
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
+                    player.on_left = True
                 
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
+                    player.on_right = True
 
         for sprite in self.falling_trap_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
@@ -283,6 +286,7 @@ class Level:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
                     player.in_air = False
+                    player.double_jump = True
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
                 
@@ -294,6 +298,7 @@ class Level:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
                     player.in_air = False
+                    player.double_jump = True
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
                     sprite.dead = True

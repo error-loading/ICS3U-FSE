@@ -16,9 +16,11 @@ class Player(pygame.sprite.Sprite):
         self.scale = (50, 50)
         self.scrollY = 0
         self.jump_speed = -10
+        self.jump_force = -5
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 5
         self.in_air = True
+        self.double_jump = True
 
         # animations
         self.animation = []
@@ -29,12 +31,18 @@ class Player(pygame.sprite.Sprite):
 
         self.get_imgs()
 
+        # wall
+        self.on_right = False
+        self.on_left = False
+
         # states
         self.IDLE = 0
         self.JUMP = 1
         self.RUN = 2
         self.FALL = 3
         self.HIT = 4
+        self.WALL = 5
+        self.DOUBLEJUMP = 6
 
         self.action = 0
 
@@ -71,10 +79,6 @@ class Player(pygame.sprite.Sprite):
 
     # getting gravity
     def get_gravity(self):
-        # if self.in_air:
-        #     self.direction.y += self.gravity
-        # else:
-        #     self.direction.y = 0
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
 
@@ -90,6 +94,10 @@ class Player(pygame.sprite.Sprite):
             f"assets/character/{self.char}/fall.png", (32, 32), self.scale)
         hit = import_sprite_sheet(
             f"assets/character/{self.char}/hit.png", (32, 32), self.scale)
+        wall = import_sprite_sheet(
+            f"assets/character/{self.char}/wall.png", (32, 32), self.scale)
+        doublejump = import_sprite_sheet(
+            f"assets/character/{self.char}/doublejump.png", (32, 32), self.scale)
         
         for i in range(1, 6):
             img = pygame.image.load(f"assets/items/dust_particles/run/run_{i}.png")
@@ -100,6 +108,8 @@ class Player(pygame.sprite.Sprite):
         self.animation.append(run)
         self.animation.append(fall)
         self.animation.append(hit)
+        self.animation.append(wall)
+        self.animation.append(doublejump)
 
     # getting input from the user
     def get_input(self):
@@ -109,27 +119,48 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 1
             self.flip = False
             self.update_action(self.RUN)
+
+            if self.on_right:
+                self.gravity = 0.05
+                self.update_action(self.WALL)
         
         elif key[pygame.K_LEFT]:
             self.direction.x = -1
             self.flip = True
             self.update_action(self.RUN)
+
+            if self.on_left:
+                self.gravity = 0.05
+                self.update_action(self.WALL)
             
         else:
             self.direction.x = 0
+            self.on_left = False
+            self.on_right = False
+            self.gravity = 0.3
 
-        
         if key[pygame.K_SPACE] and not self.in_air:
             self.in_air = True
+            self.update_action(self.JUMP)
             self.jump()
         
-        if not key[pygame.K_RIGHT] and not key[pygame.K_LEFT] and not key[pygame.K_SPACE]:
+        elif key[pygame.K_UP] and self.in_air and self.double_jump:
+            self.double_jump = False
+            self.update_action(self.DOUBLEJUMP)
+            self.higher_jump()
+        
+        if not key[pygame.K_RIGHT] and not key[pygame.K_LEFT] and not key[pygame.K_SPACE] and not key[pygame.K_UP]:
             self.update_action(self.IDLE)
 
     # jump
     def jump(self):
         self.create_particles(self.rect.midbottom)
         self.direction.y = self.jump_speed
+    
+    # higher jump
+    def higher_jump(self):
+        self.create_particles(self.rect.midbottom)
+        self.direction.y = self.jump_force
 
     # run animations
     def run_animations(self):

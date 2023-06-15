@@ -90,13 +90,6 @@ class Player(pygame.sprite.Sprite):
         # Ensure the circle does not exceed the screen size
         self.current_radius = min(self.current_radius, self.target_radius)
 
-        # Create a transparent black surface with a circular mask
-        # black_screen = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-        # pygame.draw.circle(black_screen, (0, 0, 0, 10), self.circle_pos, self.current_radius)
-
-        # # Blit the black screen onto the main surface
-        # self.screen.blit(black_screen, (0, 0))
-
         pygame.draw.circle(self.screen, GRAY, self.circle_pos, self.current_radius)
 
         if self.current_radius == self.target_radius:
@@ -104,7 +97,7 @@ class Player(pygame.sprite.Sprite):
             
 
     def check_lvl_collision(self):
-        for i in range(1, len(self.lvls)):
+        for i in range(1, len(self.lvls) + 1):
             for sprite in self.lvls[i - 1]:
                 if sprite.rect.colliderect(self.rect):
                     self.cover_bg(i)
