@@ -194,7 +194,7 @@ class Level:
 
         for sprite in self.terrain_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
-                player.in_air = False
+                # player.in_air = False
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
                 
@@ -203,14 +203,14 @@ class Level:
 
         for sprite in self.falling_trap_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
-                player.in_air = False
+                # player.in_air = False
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
                 
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
 
-                sprite.dead = True
+                # sprite.dead = True
 
     # call function to reset the level
     def reset(self):
@@ -281,8 +281,8 @@ class Level:
 
         for sprite in self.terrain_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
-                player.in_air = False
                 if player.direction.y > 0:
+                    player.in_air = False
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
                 
@@ -292,16 +292,16 @@ class Level:
 
         for sprite in self.falling_trap_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
-                player.in_air = False
                 if player.direction.y > 0:
+                    player.in_air = False
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
+                    sprite.dead = True
                 
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
-                sprite.dead = True
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
     def run(self):
