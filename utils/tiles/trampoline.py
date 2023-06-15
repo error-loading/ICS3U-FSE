@@ -2,7 +2,7 @@ import pygame
 from utils.support import import_sprite_sheet
 from constants import *
 
-class Arrow(pygame.sprite.Sprite):
+class Trampoline(pygame.sprite.Sprite):
     def __init__(self, posX, posY):
         super().__init__()
         self.posX = posX
@@ -28,6 +28,8 @@ class Arrow(pygame.sprite.Sprite):
                 self.bounce = False
                 self.frame_index = 0
                 self.image = self.idle_image
+            
+            self.image = self.collection[int(self.frame_index)]
             
         
     def change_bounce(self):

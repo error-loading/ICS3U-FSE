@@ -5,6 +5,7 @@ from utils.tiles.spikes import Spikes
 from utils.tiles.fruits import Apple, Banana, Cherry, Stawberry, Pineapple
 from utils.tiles.falling_trap import FallingTrap
 from utils.tiles.saw_trap import Saw_Trap
+from utils.tiles.trampoline import Trampoline
 from utils.particles import Particles
 from utils.teleport import Teleport, Portal, TeleportAway
 from utils.player import Player
@@ -61,6 +62,7 @@ class Level:
         self.traps = import_csv(self.data["traps"])
 
         self.falling_trap_sprites = self.create_group("traps", "0")
+        self.trampoline_sprites = self.create_group("traps", "1")
         self.saw_trap_sprites = self.create_group("traps", "3")
         self.spike_sprites = self.create_group("traps", "5")
 
@@ -126,6 +128,11 @@ class Level:
                     # falling trap
                     if self.traps[x][y] == "0" and trap_type == "0":
                         sprite = FallingTrap(posX, posY)
+                        group.add(sprite)
+                    
+                    # trampolines
+                    if self.traps[x][y] == "1" and trap_type == "1":
+                        sprite = Trampoline(posX, posY)
                         group.add(sprite)
 
                     # saw trap
@@ -216,6 +223,15 @@ class Level:
                     player.rect.right = sprite.rect.left
 
                 # sprite.dead = True
+
+        for sprite in self.trampoline_sprites.sprites():
+            if sprite.rect.colliderect(player.rect):
+                if player.direction.x < 0:
+                    player.rect.left = sprite.rect.right
+                
+                elif player.direction.x > 0:
+                    player.rect.right = sprite.rect.left
+
 
     # call function to reset the level
     def reset(self):
@@ -309,6 +325,18 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
+        for sprite in self.trampoline_sprites.sprites():
+            if sprite.rect.colliderect(player.rect):
+                if player.direction.y > 0:
+                    player.rect.bottom = sprite.rect.top
+                    player.direction.y = 0
+                    sprite.change_bounce()
+                    player.jump()
+                
+                elif player.direction.y < 0:
+                    player.rect.top = sprite.rect.bottom
+                    player.direction.y = 0
+
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
     def run(self):
@@ -344,6 +372,9 @@ class Level:
         self.terrain_sprites.draw(self.screen)
         self.terrain_sprites.update(self.shiftX, self.shiftY)
 
+        # trampoline sprites
+        self.trampoline_sprites.draw(self.screen)
+        self.trampoline_sprites.update(self.shiftX, self.shiftY)
 
         # falling trap sprites draw and update
         self.falling_trap_sprites.draw(self.screen)
