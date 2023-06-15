@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.scale = (50, 50)
         self.scrollY = 0
         self.jump_speed = -10
-        self.jump_force = -5
+        self.jump_force = -10
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 5
         self.in_air = True
@@ -60,7 +60,8 @@ class Player(pygame.sprite.Sprite):
         self.frame_index += self.frame_rate
 
         if self.frame_index >= len(self.animation[self.action]):
-            if self.action == self.HIT:
+            if self.action == self.HIT or self.action == self.JUMP or self.action == self.DOUBLEJUMP:
+                if self.action == self.DOUBLEJUMP: self.action = self.JUMP
                 self.frame_index = len(self.animation[self.action]) - 1
             
             else:
@@ -120,8 +121,8 @@ class Player(pygame.sprite.Sprite):
             self.flip = False
             self.update_action(self.RUN)
 
-            if self.on_right:
-                self.gravity = 0.05
+            if self.on_right and not self.in_air:
+                self.direction.y = 0.5
                 self.update_action(self.WALL)
         
         elif key[pygame.K_LEFT]:
@@ -129,15 +130,14 @@ class Player(pygame.sprite.Sprite):
             self.flip = True
             self.update_action(self.RUN)
 
-            if self.on_left:
-                self.gravity = 0.05
+            if self.on_left and not self.in_air:
+                self.direction.y = 0.5
                 self.update_action(self.WALL)
             
         else:
             self.direction.x = 0
             self.on_left = False
             self.on_right = False
-            self.gravity = 0.3
 
         if key[pygame.K_SPACE] and not self.in_air:
             self.in_air = True

@@ -28,15 +28,17 @@ while running:
 
     screen.fill(BLUE)
 
-    # run instances here
-    if config.state == "overworld":
-        overworld.run()
+    lvl2.run()
 
-    elif config.state == "lvl1":
-        lvl1.run()
+    # run instances here
+    # if config.state == "overworld":
+    #     overworld.run()
+
+    # elif config.state == "lvl1":
+    #     lvl1.run()
     
-    elif config.state == "lvl2":
-        lvl2.run()
+    # elif config.state == "lvl2":
+    #     lvl2.run()
 
 
     myClock.tick(60)
