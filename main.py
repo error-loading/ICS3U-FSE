@@ -5,7 +5,7 @@ from constants import *
 from utils.level import Level
 from utils.overworld import Overworld
 from config import config
-from game_data import lvl1, lvl2, lvl3
+from game_data import lvl1, lvl2, lvl3, lvl4
 
 pygame.init()
 
@@ -19,7 +19,7 @@ overworld = Overworld(screen)
 lvl1 = Level(screen, lvl1, overworld)
 lvl2 = Level(screen, lvl2, overworld)
 lvl3 = Level(screen, lvl3, overworld, (32, 32))
-
+lvl4 = Level(screen, lvl4, overworld)
 
 while running:
     for event in pygame.event.get():
@@ -35,7 +35,7 @@ while running:
         lvl1.run()
     
     elif config.state == "lvl2":
-        lvl2.run()
+        lvl4.run()
     
     elif config.state == "lvl3":
         lvl3.run()

@@ -123,7 +123,8 @@ class Player(pygame.sprite.Sprite):
             self.update_action(self.RUN)
 
             # wall stuff on right side
-            if self.on_right and not self.in_air:
+            if self.on_right:
+                self.in_air = False
                 self.direction.y = 0.5
                 self.update_action(self.WALL)
         

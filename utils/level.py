@@ -195,15 +195,15 @@ class Level:
 
         return group
 
-    # creating the player
-    def create_player(self):
-        pass
+    # resetting if the player is off the screen
+    def check_player_alive(self):
+        if self.player_sprite.sprite.rect.y > HEIGHT:
+            self.reset()
 
     # creating particles
     def create_particles(self, pos):
         sprite = Particles(pos)
         self.dust_sprite.add(sprite)
-
 
     # method is called to check if game is over
     def check_game_over(self):
@@ -278,7 +278,7 @@ class Level:
         for i in dead:
             self.player_died = True
             self.player_sprite.sprite.dead()
-            self.reset()
+            
 
     def scrolling_background(self):
         self.screen.blit(self.background_img, (0, self.bg_y))
@@ -316,7 +316,6 @@ class Level:
         for i in dead:
             self.player_died = True
             self.player_sprite.sprite.dead()
-            self.reset()
         
     # function for teleporting
     def teleport(self):
@@ -380,6 +379,7 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
+        
 
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
@@ -411,7 +411,7 @@ class Level:
 
         # saw trap draw and update
         self.saw_trap_sprites.draw(self.screen)
-        self.saw_trap_sprites.update(self.shiftX, self.shiftY)
+        # self.saw_trap_sprites.update(self.shiftX, self.shiftY)
 
         # arrow sprites
         self.arrow_sprites.draw(self.screen)
@@ -456,6 +456,9 @@ class Level:
             self.spike_collide()
             self.saw_trap_collide()
             self.saw_trap_sprites.update(self.shiftX, self.shiftY)
+
+        if self.player_died:
+            self.check_player_alive()
 
         self.fruit_collide()
         self.arrow_collide()
