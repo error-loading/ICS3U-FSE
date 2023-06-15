@@ -1,6 +1,6 @@
 import pygame
 from utils.support import import_sprite_sheet
-from utils.particles import Particles
+from constants import *
 from config import config
 
 # class for the player, all the functionality of the player will be here
@@ -23,6 +23,13 @@ class Player(pygame.sprite.Sprite):
         self.flip = False
 
         self.get_imgs()
+
+        # circle animations stuff
+        self.circle_pos = (WIDTH // 2, HEIGHT // 2)
+        self.initial_radius = 0
+        self.target_radius = (WIDTH ** 2 + HEIGHT ** 2) ** 0.5 // 2
+        self.current_radius = self.initial_radius
+        self.animation_speed = 20
 
         # states
         self.IDLE = 0
@@ -74,13 +81,33 @@ class Player(pygame.sprite.Sprite):
                     # moving up
                     if self.direction.y < 0:
                         self.rect.top = sprite.rect.bottom
+
+        
+    def cover_bg(self, lvl_num):
+        # Increase the circle's radius
+        self.current_radius += self.animation_speed
+
+        # Ensure the circle does not exceed the screen size
+        self.current_radius = min(self.current_radius, self.target_radius)
+
+        # Create a transparent black surface with a circular mask
+        # black_screen = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+        # pygame.draw.circle(black_screen, (0, 0, 0, 10), self.circle_pos, self.current_radius)
+
+        # # Blit the black screen onto the main surface
+        # self.screen.blit(black_screen, (0, 0))
+
+        pygame.draw.circle(self.screen, GRAY, self.circle_pos, self.current_radius)
+
+        if self.current_radius == self.target_radius:
+            config.state = f"lvl{lvl_num}"
             
 
     def check_lvl_collision(self):
         for i in range(1, len(self.lvls)):
             for sprite in self.lvls[i - 1]:
                 if sprite.rect.colliderect(self.rect):
-                    config.state = f"lvl{i}"
+                    self.cover_bg(i)
         
 
     # flipping the image
