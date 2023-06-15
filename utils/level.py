@@ -397,6 +397,7 @@ class Level:
 
         # saw trap draw and update
         self.saw_trap_sprites.draw(self.screen)
+        self.saw_trap_sprites.update(self.shiftX, self.shiftY)
 
         # terrain sprites draw and update
         self.terrain_sprites.draw(self.screen)
