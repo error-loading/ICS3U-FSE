@@ -15,7 +15,7 @@ from constants import *
 
 
 class Level:
-    def __init__(self, screen, data, scale = (16, 16)):
+    def __init__(self, screen, data, overworld, scale = (16, 16)):
         # general info
         self.screen = screen
         self.data = data
@@ -26,6 +26,7 @@ class Level:
         self.lvl_completed = False
         self.player_cnt = 0
         self.scale = scale
+        self.overworld = overworld
 
         # background
         self.background_img = pygame.image.load(f"assets/bg/{self.data['bg_col']}.png").convert_alpha()
@@ -103,7 +104,7 @@ class Level:
                     portal = Portal(posX, posY)
                     self.portal_sprite_end.add(portal)
 
-                    teleport = TeleportAway(posX, posY, self.portal_sprite_end, self.player_sprite)
+                    teleport = TeleportAway(posX, posY, self.portal_sprite_end, self.player_sprite, self.overworld, self.reset)
                     self.teleport_sprite_end.add(teleport)
 
                 # limits
@@ -218,7 +219,7 @@ class Level:
 
     # call function to reset the level
     def reset(self):
-        pass
+        self.__init__(self.screen, self.data, self.overworld, self.scale)
 
     # saw trap collide
     def saw_trap_collide(self):

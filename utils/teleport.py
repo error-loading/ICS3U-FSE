@@ -39,18 +39,21 @@ class Teleport(pygame.sprite.Sprite):
         self.rect.x += shiftX
 
 class TeleportAway(Teleport):
-    def __init__(self, posX, posY, portal, player):
+    def __init__(self, posX, posY, portal, player, overworld, reset):
         super().__init__(posX, posY, portal)
         self.player = player
         self.portal = portal
+        self.overworld = overworld
+        self.reset = reset
         self.animations = import_sprite_sheet("assets/character/Desappearing (96x96).png", (96, 96))
     
     def animate(self):
         self.frame_index += self.frame_rate
 
         if self.frame_index >= len(self.animations):
-            # self.player.sprite.kill()
             self.portal.sprite.kill()
+            self.overworld.reset()
+            self.reset()
             config.state = "overworld"
             self.kill()
         

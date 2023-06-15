@@ -15,11 +15,11 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 myClock = pygame.time.Clock()
 
 # creating instances
-lvl1 = Level(screen, lvl1)
-lvl2 = Level(screen, lvl2)
-lvl3 = Level(screen, lvl3, (32, 32))
-
 overworld = Overworld(screen)
+lvl1 = Level(screen, lvl1, overworld)
+lvl2 = Level(screen, lvl2, overworld)
+lvl3 = Level(screen, lvl3, overworld, (32, 32))
+
 
 while running:
     for event in pygame.event.get():
@@ -33,15 +33,12 @@ while running:
 
     elif config.state == "lvl1":
         lvl1.run()
-        overworld.reset()
     
     elif config.state == "lvl2":
         lvl2.run()
-        overworld.reset()
     
     elif config.state == "lvl3":
         lvl3.run()
-        overworld.reset()
 
 
     myClock.tick(60)

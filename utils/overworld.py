@@ -111,7 +111,7 @@ class Overworld:
         return group
 
     def reset(self):
-        self.player_sprites.sprite.rect.center = self.start_pos
+        self.__init__(self.screen)
 
 
     def run(self):
