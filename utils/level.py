@@ -7,6 +7,7 @@ from utils.tiles.falling_trap import FallingTrap
 from utils.tiles.saw_trap import Saw_Trap
 from utils.tiles.trampoline import Trampoline
 from utils.tiles.fire import Fire
+from utils.tiles.arrow import Arrow
 from utils.particles import Particles
 from utils.teleport import Teleport, Portal, TeleportAway
 from utils.player import Player
@@ -66,6 +67,7 @@ class Level:
         self.trampoline_sprites = self.create_group("traps", "1")
         self.fire_sprites = self.create_group("traps", "2")
         self.saw_trap_sprites = self.create_group("traps", "3")
+        self.arrow_sprites = self.create_group("arrow", "4")
         self.spike_sprites = self.create_group("traps", "5")
 
         # fruits
@@ -75,6 +77,13 @@ class Level:
         # particle
         self.dust_sprite = pygame.sprite.GroupSingle()
 
+    # arrow collide, jump stuff and ppl ykyk
+    def arrow_collide(self):
+
+        jumpeth = pygame.sprite.spritecollide(self.player_sprite.sprite, self.arrow_sprites, True, pygame.sprite.collide_mask)
+
+        for i in jumpeth:
+            self.player_sprite.sprite.jump()
 
     # creating the tiles for terrains and collectables
     def create_group(self, type, trap_type = "-1"):
@@ -145,6 +154,11 @@ class Level:
                     # saw trap
                     if self.traps[x][y] == "3" and trap_type == "3":
                         sprite = Saw_Trap(posX, posY, x, y, self.terrain, self.limits_sprites)
+                        group.add(sprite)
+                    
+                    # arrow 
+                    if self.traps[x][y] == "4" and trap_type == "4":
+                        sprite = Arrow(posX, posY)
                         group.add(sprite)
 
                     # spikes
@@ -399,6 +413,10 @@ class Level:
         self.saw_trap_sprites.draw(self.screen)
         self.saw_trap_sprites.update(self.shiftX, self.shiftY)
 
+        # arrow sprites
+        self.arrow_sprites.draw(self.screen)
+        self.arrow_sprites.update(self.shiftX, self.shiftY)
+
         # terrain sprites draw and update
         self.terrain_sprites.draw(self.screen)
         self.terrain_sprites.update(self.shiftX, self.shiftY)
@@ -440,6 +458,7 @@ class Level:
             self.saw_trap_sprites.update(self.shiftX, self.shiftY)
 
         self.fruit_collide()
+        self.arrow_collide()
         self.scrollX()
         self.scrollY()
         self.player_cnt += 1
