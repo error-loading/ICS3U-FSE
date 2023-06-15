@@ -6,6 +6,7 @@ from utils.tiles.fruits import Apple, Banana, Cherry, Stawberry, Pineapple
 from utils.tiles.falling_trap import FallingTrap
 from utils.tiles.saw_trap import Saw_Trap
 from utils.tiles.trampoline import Trampoline
+from utils.tiles.fire import Fire
 from utils.particles import Particles
 from utils.teleport import Teleport, Portal, TeleportAway
 from utils.player import Player
@@ -63,6 +64,7 @@ class Level:
 
         self.falling_trap_sprites = self.create_group("traps", "0")
         self.trampoline_sprites = self.create_group("traps", "1")
+        self.fire_sprites = self.create_group("traps", "2")
         self.saw_trap_sprites = self.create_group("traps", "3")
         self.spike_sprites = self.create_group("traps", "5")
 
@@ -133,6 +135,11 @@ class Level:
                     # trampolines
                     if self.traps[x][y] == "1" and trap_type == "1":
                         sprite = Trampoline(posX, posY)
+                        group.add(sprite)
+                    
+                    # fire stuff
+                    if self.traps[x][y] == "2" and trap_type == "2":
+                        sprite = Fire(posX, posY)
                         group.add(sprite)
 
                     # saw trap
@@ -225,6 +232,14 @@ class Level:
                 # sprite.dead = True
 
         for sprite in self.trampoline_sprites.sprites():
+            if sprite.rect.colliderect(player.rect):
+                if player.direction.x < 0:
+                    player.rect.left = sprite.rect.right
+                
+                elif player.direction.x > 0:
+                    player.rect.right = sprite.rect.left
+
+        for sprite in self.fire_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
@@ -337,6 +352,21 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
+        for sprite in self.fire_sprites.sprites():
+            if sprite.rect.colliderect(player.rect):
+                if player.direction.y > 0:
+                    player.rect.bottom = sprite.rect.top
+                    player.direction.y = 0
+
+                    sprite.set_hit(True)
+                    if sprite.frame_index >= 4:
+                        player.dead()
+                        self.player_died = True
+
+                elif player.direction.y < 0:
+                    player.rect.top = sprite.rect.bottom
+                    player.direction.y = 0
+
 
     # this method will be called by the main function, all the stuff that will be going in the while loop will be called here
     def run(self):
@@ -375,6 +405,10 @@ class Level:
         # trampoline sprites
         self.trampoline_sprites.draw(self.screen)
         self.trampoline_sprites.update(self.shiftX, self.shiftY)
+
+        # fire sprites
+        self.fire_sprites.draw(self.screen)
+        self.fire_sprites.update(self.shiftX, self.shiftY)
 
         # falling trap sprites draw and update
         self.falling_trap_sprites.draw(self.screen)
