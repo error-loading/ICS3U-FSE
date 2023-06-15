@@ -5,7 +5,7 @@ from constants import *
 from utils.level import Level
 from utils.overworld import Overworld
 from config import config
-from game_data import lvl1, lvl2
+from game_data import lvl1, lvl2, lvl3
 
 pygame.init()
 
@@ -17,6 +17,7 @@ myClock = pygame.time.Clock()
 # creating instances
 lvl1 = Level(screen, lvl1)
 lvl2 = Level(screen, lvl2)
+lvl3 = Level(screen, lvl3, (32, 32))
 
 overworld = Overworld(screen)
 
@@ -26,19 +27,21 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill(BLUE)
-
-    lvl2.run()
-
     # run instances here
-    # if config.state == "overworld":
-    #     overworld.run()
+    if config.state == "overworld":
+        overworld.run()
 
-    # elif config.state == "lvl1":
-    #     lvl1.run()
+    elif config.state == "lvl1":
+        lvl1.run()
+        overworld.reset()
     
-    # elif config.state == "lvl2":
-    #     lvl2.run()
+    elif config.state == "lvl2":
+        lvl2.run()
+        overworld.reset()
+    
+    elif config.state == "lvl3":
+        lvl3.run()
+        overworld.reset()
 
 
     myClock.tick(60)

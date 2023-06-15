@@ -20,6 +20,7 @@ class Overworld:
 
         self.lvl1_sprites = self.create_group("lvl1")
         self.lvl2_sprites = self.create_group("lvl2")
+        self.lvl3_sprites = self.create_group("lvl3")
 
         self.lvl_sprites = [self.lvl1_sprites, self.lvl2_sprites]
 
@@ -80,6 +81,7 @@ class Overworld:
                 
                 elif type == "player" and self.player_csv[x][y] == "1":
                     group = pygame.sprite.GroupSingle()
+                    self.start_pos = (posX, posY)
                     sprite = Player((posX, posY), self.screen, self.limit_sprites, self.lvl_sprites)
                     group.add(sprite)
                     return group
@@ -99,8 +101,17 @@ class Overworld:
                         sprite = Terrain(posX, posY, self.house_imgs, 5)
                         group.add(sprite)
                 
+                elif type == "lvl3":
+                    if self.limit_csv[x][y] == "106":
+                        sprite = Terrain(posX, posY, self.house_imgs, 5)
+                        group.add(sprite)
+        
+                
         
         return group
+
+    def reset(self):
+        self.player_sprites.sprite.rect.center = self.start_pos
 
 
     def run(self):

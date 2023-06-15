@@ -1,7 +1,7 @@
 from utils.player import Player
 from utils.support import import_sprite_sheet
 import pygame
-import time
+from config import config
 
 class Teleport(pygame.sprite.Sprite):
     def __init__(self, posX, posY, portal):
@@ -51,6 +51,7 @@ class TeleportAway(Teleport):
         if self.frame_index >= len(self.animations):
             # self.player.sprite.kill()
             self.portal.sprite.kill()
+            config.state = "overworld"
             self.kill()
         
         else:

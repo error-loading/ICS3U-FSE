@@ -15,7 +15,7 @@ from constants import *
 
 
 class Level:
-    def __init__(self, screen, data):
+    def __init__(self, screen, data, scale = (16, 16)):
         # general info
         self.screen = screen
         self.data = data
@@ -25,6 +25,7 @@ class Level:
         self.player_died = False
         self.lvl_completed = False
         self.player_cnt = 0
+        self.scale = scale
 
         # background
         self.background_img = pygame.image.load(f"assets/bg/{self.data['bg_col']}.png").convert_alpha()
@@ -36,7 +37,7 @@ class Level:
         # terrain
         self.terrain = import_csv(self.data["terrain"])
         self.terrain_sprite_sheet = import_sprite_sheet(
-            "assets/terrain/terrain.png", (16, 16))
+            "assets/terrain/terrain.png", (16, 16), self.scale)
         self.terrain_sprites = self.create_group("terrain")
 
         # limits

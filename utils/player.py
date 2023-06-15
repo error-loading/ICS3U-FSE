@@ -1,6 +1,7 @@
 import pygame
 from utils.support import import_sprite_sheet
 from utils.particles import Particles
+from constants import *
 
 # class for the player, all the functionality of the player will be here
 class Player(pygame.sprite.Sprite):
@@ -121,6 +122,7 @@ class Player(pygame.sprite.Sprite):
             self.flip = False
             self.update_action(self.RUN)
 
+            # wall stuff on right side
             if self.on_right and not self.in_air:
                 self.direction.y = 0.5
                 self.update_action(self.WALL)
@@ -130,6 +132,7 @@ class Player(pygame.sprite.Sprite):
             self.flip = True
             self.update_action(self.RUN)
 
+            # wall stuff on left side
             if self.on_left and not self.in_air:
                 self.direction.y = 0.5
                 self.update_action(self.WALL)

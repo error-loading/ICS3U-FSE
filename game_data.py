@@ -15,3 +15,12 @@ lvl2 = {
     "limits" : "levels/level_2/level2_limits.csv",
     "bg_col" : "brown"
 }
+
+lvl3 = {
+    "terrain" : "levels/level_3/level3_terrain.csv",
+    "player" : "levels/level_3/level3_player.csv",
+    "traps" : "levels/level_3/level3_traps.csv",
+    "fruits" : "levels/level_3/level3_fruits.csv",
+    "limits" : "levels/level_3/level3_limits.csv",
+    "bg_col" : "brown"
+}
