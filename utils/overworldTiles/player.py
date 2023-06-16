@@ -94,7 +94,6 @@ class Player(pygame.sprite.Sprite):
 
         if self.current_radius == self.target_radius:
             config.state = f"lvl{lvl_num}"
-            print(lvl_num)
             
 
     def check_lvl_collision(self):

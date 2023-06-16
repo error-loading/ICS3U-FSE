@@ -146,10 +146,7 @@ class Overworld:
 
         self.water_details_sprites.draw(self.screen)
         self.water_details_sprites.update()
-
-        self.house_sprites.draw(self.screen)
-        self.house_sprites.update()
-
+        
         if not self.game_paused:
 
             self.player_sprites.draw(self.screen)
@@ -157,4 +154,8 @@ class Overworld:
         
         else:
             self.menu.display()
+
+        self.house_sprites.draw(self.screen)
+        self.house_sprites.update()
+
         

@@ -121,7 +121,7 @@ class Level:
                     portal = Portal(posX, posY)
                     self.portal_sprite_end.add(portal)
 
-                    teleport = TeleportAway(posX, posY, self.portal_sprite_end, self.player_sprite, self.overworld, self.reset)
+                    teleport = TeleportAway(posX, posY, self.portal_sprite_end, self.player_sprite, self.overworld, self.reset, self.screen)
                     self.teleport_sprite_end.add(teleport)
 
                 # limits
@@ -233,9 +233,10 @@ class Level:
 
         player.rect.x += player.direction.x * player.speed
 
+
+        # horizontal collision for terrain blocks
         for sprite in self.terrain_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
-                # player.in_air = False
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
                     player.on_left = True
@@ -244,31 +245,31 @@ class Level:
                     player.rect.right = sprite.rect.left
                     player.on_right = True
 
+            
+        
+        # horizontal collision for the oneway blocks
         for sprite in self.oneway_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
-                # player.in_air = False
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
-                    player.on_left = True
                 
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
-                    player.on_right = True
 
 
+        # horizontal collision for falling sprites
         for sprite in self.falling_trap_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
-                # player.in_air = False
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
                 
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
 
-                # sprite.dead = True
 
         for sprite in self.trampoline_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
+                player.in_air = False
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
                 
@@ -309,6 +310,7 @@ class Level:
 
         if self.bg_y > HEIGHT:
             self.bg_y = 0
+
     # scrolling function
     def scrollX(self):
         player = self.player_sprite.sprite
@@ -357,10 +359,12 @@ class Level:
                     player.double_jump = True
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
+
                 
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
+
 
         for sprite in self.oneway_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
@@ -386,6 +390,7 @@ class Level:
         for sprite in self.trampoline_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
+                    player.double_jump = True
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
                     sprite.change_bounce()

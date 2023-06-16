@@ -61,7 +61,6 @@ while running:
     elif config.state == "lvl5":
         lvl5.run()
 
-
     myClock.tick(60)
     pygame.display.update() 
 
