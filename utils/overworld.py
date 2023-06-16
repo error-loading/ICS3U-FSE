@@ -2,6 +2,7 @@ import pygame
 from utils.support import import_sprite_sheet, import_csv
 from utils.overworldTiles.terrain import Terrain
 from utils.overworldTiles.player import Player
+from utils.menu import Menu
 
 TILESIZE = 32
 
@@ -9,6 +10,9 @@ class Overworld:
     def __init__(self, screen):
         self.screen = screen
         self.player = "Samurai"
+
+        self.game_paused = False
+        self.menu = Menu()
 
 
         self.house_csv = import_csv("levels/overworld/overworld_houses.csv")
@@ -22,8 +26,9 @@ class Overworld:
         self.lvl2_sprites = self.create_group("lvl2")
         self.lvl3_sprites = self.create_group("lvl3")
         self.lvl4_sprites = self.create_group("lvl4")
+        self.lvl5_sprites = self.create_group("lvl5")
 
-        self.lvl_sprites = [self.lvl1_sprites, self.lvl2_sprites, self.lvl3_sprites, self.lvl4_sprites]
+        self.lvl_sprites = [self.lvl1_sprites, self.lvl2_sprites, self.lvl3_sprites, self.lvl4_sprites, self.lvl5_sprites]
 
         self.water_csv = import_csv("levels/overworld/overworld_water.csv")
         self.water_imgs = import_sprite_sheet("assets/overworld/water.png", (16, 16), (32, 32))
@@ -112,12 +117,19 @@ class Overworld:
                         sprite = Terrain(posX, posY, self.house_imgs, 5)
                         group.add(sprite)
                 
+                elif type == "lvl5":
+                    if self.limit_csv[x][y] == "542":
+                        sprite = Terrain(posX, posY, self.house_imgs, 5)
+                        group.add(sprite)
+                
         
         return group
 
     def reset(self):
         self.__init__(self.screen)
 
+    def toggle(self):
+        self.game_paused = not self.game_paused
 
     def run(self):
         self.terrain_sprites.draw(self.screen)
@@ -138,6 +150,11 @@ class Overworld:
         self.house_sprites.draw(self.screen)
         self.house_sprites.update()
 
-        self.player_sprites.draw(self.screen)
-        self.player_sprites.update()
+        if not self.game_paused:
+
+            self.player_sprites.draw(self.screen)
+            self.player_sprites.update()
+        
+        else:
+            self.menu.display()
         

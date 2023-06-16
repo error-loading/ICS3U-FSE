@@ -96,8 +96,8 @@ class Level:
         for x, row in enumerate(self.terrain):
             for y, val in enumerate(row):
 
-                posX = y * TILESIZE
-                posY = x * TILESIZE
+                posX = y * TILESIZE * self.scale[0] // TILESIZE
+                posY = x * TILESIZE * self.scale[1] // TILESIZE
                 # this class creates groups for multiple types of tilesets
 
                 if type == "player" and self.player[x][y] == "1":
@@ -153,7 +153,7 @@ class Level:
                     
                     # trampolines
                     if self.traps[x][y] == "1" and trap_type == "1":
-                        sprite = Trampoline(posX, posY)
+                        sprite = Trampoline(posX, posY, self.scale)
                         group.add(sprite)
                     
                     # fire stuff
@@ -168,12 +168,12 @@ class Level:
                     
                     # arrow 
                     if self.traps[x][y] == "4" and trap_type == "4":
-                        sprite = Arrow(posX, posY)
+                        sprite = Arrow(posX, posY, self.scale)
                         group.add(sprite)
 
                     # spikes
                     if self.traps[x][y] == "5" and trap_type == "5":
-                        sprite = Spikes(posX, posY)
+                        sprite = Spikes(posX, posY, self.scale)
                         group.add(sprite)
 
                 # fruit tilesets

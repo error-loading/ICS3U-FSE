@@ -3,13 +3,15 @@ from utils.support import import_sprite_sheet
 from constants import *
 
 class Trampoline(pygame.sprite.Sprite):
-    def __init__(self, posX, posY):
+    def __init__(self, posX, posY, scale):
         super().__init__()
         self.posX = posX
         self.posY = posY
+        self.scale = scale
 
         self.idle_image = pygame.image.load("assets/traps/trampoline/Idle.png").convert_alpha()
-        self.collection = import_sprite_sheet("assets/traps/trampoline/Jump (28x28).png", (28, 28))
+        self.idle_image = pygame.transform.scale(self.idle_image, self.scale)
+        self.collection = import_sprite_sheet("assets/traps/trampoline/Jump (28x28).png", (28, 28), self.scale)
 
         self.bounce = False
 

@@ -1,6 +1,6 @@
 class Config:
     def __init__(self):
-        self.state = "overworld"
+        self.state = "menu"
         self.new = False
 
 config = Config()

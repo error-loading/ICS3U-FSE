@@ -163,7 +163,7 @@ class Player(pygame.sprite.Sprite):
         if not key[pygame.K_RIGHT] and not key[pygame.K_LEFT] and not key[pygame.K_UP] and not key[pygame.K_DOWN]:
             self.direction.x = 0
             self.direction.y = 0 
-            self.idle = False
+            self.idle = True
 
     def move(self, speed):
         if self.direction.magnitude() != 0:

@@ -3,13 +3,14 @@ from utils.support import import_sprite_sheet
 from constants import *
 
 class Arrow(pygame.sprite.Sprite):
-    def __init__(self, posX, posY):
+    def __init__(self, posX, posY, scale):
         super().__init__()
         self.posX = posX
         self.posY = posY
+        self.scale = scale
 
-        self.collection = import_sprite_sheet("assets/traps/arrow/Idle (18x18).png", (18, 18))
-        self.hit_collection = import_sprite_sheet("assets/traps/arrow/Hit (18x18).png", (18, 18))
+        self.collection = import_sprite_sheet("assets/traps/arrow/Idle (18x18).png", (18, 18), self.scale)
+        self.hit_collection = import_sprite_sheet("assets/traps/arrow/Hit (18x18).png", (18, 18), self.scale)
 
         self.hit = False
 
