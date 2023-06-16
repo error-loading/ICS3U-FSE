@@ -24,9 +24,7 @@ class Intro:
         self.animation_speed = 20
 
     
-    def draw_text(self, text, font, text_col, x, y):
-        img = font.render(text, True, text_col)
-        self.screen.blit(img, (x, y))
+        self.rect = pygame.Rect(410, 373, 264, 75)
 
     def cover_bg(self):
         # Increase the circle's radius
@@ -39,13 +37,19 @@ class Intro:
 
         if self.current_radius == self.target_radius:
             config.state = f"overworld"
+
+    def collision(self):
+        pos = pygame.mouse.get_pos()
+
+		#check mouseover
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                self.clicked = True
     
     def update(self):
         self.screen.blit(self.image, (0, 0))
-        self.draw_text('TITLE', self.zombiootitle, WHITE, 350, 125)
-
-        if self.start_btn.draw(self.screen):
-            self.clicked = True
+        pygame.draw.rect(self.screen, WHITE, self.rect, 3)
+        self.collision()
         
         if self.clicked:
             self.cover_bg()
