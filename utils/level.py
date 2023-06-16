@@ -44,11 +44,14 @@ class Level:
             "assets/terrain/terrain.png", (16, 16), self.scale)
         self.terrain_sprites = self.create_group("terrain")
 
+        # oneway
+        self.oneway = import_csv(self.data["oneway"])
+        self.oneway_sprites = self.create_group("oneway")
+
         # limits
         self.limits = import_csv(self.data["limits"])
         self.limits_sprites = self.create_group(type = "limit")
 
-        test = pygame.sprite.Group()
 
         # teleport
         self.teleport_sprite = pygame.sprite.GroupSingle()
@@ -59,6 +62,7 @@ class Level:
         # player
         self.player = import_csv(self.data["player"])
         self.player_sprite = self.create_group("player")
+        self.create_group("teleport_end")
 
         # traps
         self.traps = import_csv(self.data["traps"])
@@ -67,7 +71,7 @@ class Level:
         self.trampoline_sprites = self.create_group("traps", "1")
         self.fire_sprites = self.create_group("traps", "2")
         self.saw_trap_sprites = self.create_group("traps", "3")
-        self.arrow_sprites = self.create_group("arrow", "4")
+        self.arrow_sprites = self.create_group("traps", "4")
         self.spike_sprites = self.create_group("traps", "5")
 
         # fruits
@@ -113,7 +117,7 @@ class Level:
 
 
                 
-                if type == "player" and self.player[x][y] == "2":
+                if type == "teleport_end" and self.player[x][y] == "2":
                     portal = Portal(posX, posY)
                     self.portal_sprite_end.add(portal)
 
@@ -132,6 +136,12 @@ class Level:
                 if type == "terrain" and val != "-1":
                     sprite = Terrain(
                         posX, posY, self.terrain_sprite_sheet, int(val))
+                    group.add(sprite)
+                
+                if type == "oneway" and self.oneway[x][y] != "-1":
+                    sprite = Terrain(
+                        posX, posY, self.terrain_sprite_sheet, int(self.oneway[x][y])
+                    )
                     group.add(sprite)
 
                 # traps tilesets
@@ -169,7 +179,7 @@ class Level:
                 # fruit tilesets
                 if type == "fruits":
                     # Apple
-                    if self.fruits[x][y] == "1":
+                    if self.fruits[x][y] == "0":
                         sprite = Apple(posX, posY)
                         group.add(sprite)
 
@@ -179,17 +189,17 @@ class Level:
                         group.add(sprite)
 
                     # Cherry
-                    elif self.fruits[x][y] == "3":
+                    elif self.fruits[x][y] == "4":
                         sprite = Cherry(posX, posY)
                         group.add(sprite)
 
                     # Stawberry
-                    elif self.fruits[x][y] == "4":
+                    elif self.fruits[x][y] == "6":
                         sprite = Stawberry(posX, posY)
                         group.add(sprite)
 
                     # Pineapple
-                    elif self.fruits[x][y] == "6":
+                    elif self.fruits[x][y] == "7":
                         sprite = Pineapple(posX, posY)
                         group.add(sprite)
 
@@ -233,6 +243,18 @@ class Level:
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
                     player.on_right = True
+
+        for sprite in self.oneway_sprites.sprites():
+            if sprite.rect.colliderect(player.rect):
+                # player.in_air = False
+                if player.direction.x < 0:
+                    player.rect.left = sprite.rect.right
+                    player.on_left = True
+                
+                elif player.direction.x > 0:
+                    player.rect.right = sprite.rect.left
+                    player.on_right = True
+
 
         for sprite in self.falling_trap_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
@@ -340,6 +362,14 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
+        for sprite in self.oneway_sprites.sprites():
+            if sprite.rect.colliderect(player.rect):
+                if player.direction.y > 0:
+                    player.in_air = False
+                    player.double_jump = True
+                    player.rect.bottom = sprite.rect.top
+                    player.direction.y = 0
+                
         for sprite in self.falling_trap_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
@@ -413,13 +443,18 @@ class Level:
         self.saw_trap_sprites.draw(self.screen)
         # self.saw_trap_sprites.update(self.shiftX, self.shiftY)
 
-        # arrow sprites
-        self.arrow_sprites.draw(self.screen)
-        self.arrow_sprites.update(self.shiftX, self.shiftY)
 
         # terrain sprites draw and update
         self.terrain_sprites.draw(self.screen)
         self.terrain_sprites.update(self.shiftX, self.shiftY)
+
+        # oneway stuff
+        self.oneway_sprites.draw(self.screen)
+        self.oneway_sprites.update(self.shiftX, self.shiftY)
+
+        # arrow sprites
+        self.arrow_sprites.draw(self.screen)
+        self.arrow_sprites.update(self.shiftX, self.shiftY)
 
         # trampoline sprites
         self.trampoline_sprites.draw(self.screen)

@@ -21,8 +21,9 @@ class Overworld:
         self.lvl1_sprites = self.create_group("lvl1")
         self.lvl2_sprites = self.create_group("lvl2")
         self.lvl3_sprites = self.create_group("lvl3")
+        self.lvl4_sprites = self.create_group("lvl4")
 
-        self.lvl_sprites = [self.lvl1_sprites, self.lvl2_sprites]
+        self.lvl_sprites = [self.lvl1_sprites, self.lvl2_sprites, self.lvl3_sprites, self.lvl4_sprites]
 
         self.water_csv = import_csv("levels/overworld/overworld_water.csv")
         self.water_imgs = import_sprite_sheet("assets/overworld/water.png", (16, 16), (32, 32))
@@ -105,7 +106,11 @@ class Overworld:
                     if self.limit_csv[x][y] == "106":
                         sprite = Terrain(posX, posY, self.house_imgs, 5)
                         group.add(sprite)
-        
+
+                elif type == "lvl4":
+                    if self.limit_csv[x][y] == "146":
+                        sprite = Terrain(posX, posY, self.house_imgs, 5)
+                        group.add(sprite)
                 
         
         return group

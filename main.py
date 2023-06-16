@@ -18,7 +18,7 @@ myClock = pygame.time.Clock()
 overworld = Overworld(screen)
 lvl1 = Level(screen, lvl1, overworld)
 lvl2 = Level(screen, lvl2, overworld)
-lvl3 = Level(screen, lvl3, overworld, (32, 32))
+lvl3 = Level(screen, lvl3, overworld)
 lvl4 = Level(screen, lvl4, overworld)
 
 while running:
@@ -35,10 +35,13 @@ while running:
         lvl1.run()
     
     elif config.state == "lvl2":
-        lvl4.run()
+        lvl2.run()
     
     elif config.state == "lvl3":
         lvl3.run()
+    
+    elif config.state == "lvl4":
+        lvl4.run()
 
 
     myClock.tick(60)

@@ -4,6 +4,7 @@ lvl1 = {
     "traps" : "levels/level_1/level1_traps.csv",
     "fruits" : "levels/level_1/level1_fruits.csv",
     "limits" : "levels/level_1/level1_limits.csv",
+    "oneway" : "levels/level_1/level1_oneway.csv",
     "bg_col" : "yellow"
 }
 
@@ -13,6 +14,7 @@ lvl2 = {
     "traps" : "levels/level_2/level2_traps.csv",
     "fruits" : "levels/level_2/level2_fruits.csv",
     "limits" : "levels/level_2/level2_limits.csv",
+    "oneway" : "levels/level_2/level2_oneway.csv",
     "bg_col" : "brown"
 }
 
@@ -22,7 +24,8 @@ lvl3 = {
     "traps" : "levels/level_3/level3_traps.csv",
     "fruits" : "levels/level_3/level3_fruits.csv",
     "limits" : "levels/level_3/level3_limits.csv",
-    "bg_col" : "brown"
+    "oneway" : "levels/level_3/level3_oneway.csv",
+    "bg_col" : "green"
 }
 
 lvl4 = {
@@ -31,5 +34,6 @@ lvl4 = {
     "traps" : "levels/level_4/level4_traps.csv",
     "fruits" : "levels/level_4/level4_fruits.csv",
     "limits" : "levels/level_4/level4_limits.csv",
-    "bg_col" : "brown"
+    "oneway" : "levels/level_4/level4_oneway.csv",
+    "bg_col" : "green"
 }
