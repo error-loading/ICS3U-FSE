@@ -135,27 +135,32 @@ class Overworld:
         self.terrain_sprites.draw(self.screen)
         self.terrain_sprites.update()
 
-        self.floor_sprites.draw(self.screen)
-        self.floor_sprites.update()
-
-        self.nature_sprites.draw(self.screen)
-        self.nature_sprites.update()
-
         self.water_sprites.draw(self.screen)
         self.water_sprites.update()
 
         self.water_details_sprites.draw(self.screen)
         self.water_details_sprites.update()
+
+        self.nature_sprites.draw(self.screen)
+        self.nature_sprites.update()
+        
+        self.floor_sprites.draw(self.screen)
+        self.floor_sprites.update()
+
+        self.player_sprites.draw(self.screen)
+    
+        self.house_sprites.draw(self.screen)
+        self.house_sprites.update()
+
+
+
         
         if not self.game_paused:
-
-            self.player_sprites.draw(self.screen)
+            
             self.player_sprites.update()
-        
+
         else:
             self.menu.display()
 
-        self.house_sprites.draw(self.screen)
-        self.house_sprites.update()
 
         

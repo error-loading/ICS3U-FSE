@@ -6,7 +6,10 @@ MAP_HEIGHT = 42
 WIDTH = 1086
 HEIGHT = TILESIZE * MAP_HEIGHT
 
-SCREEN_CAPTION = "Platfromr"
+SCREEN_CAPTION = "Platform.io"
+
+UI_FONT = 'font/joystix.ttf'
+UI_FONT_SIZE = 18
 
 # basic colours
 GRAY = (100, 100, 100)
