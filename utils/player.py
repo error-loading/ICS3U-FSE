@@ -2,6 +2,7 @@ import pygame
 from utils.support import import_sprite_sheet
 from utils.particles import Particles
 from constants import *
+from config import config
 
 # class for the player, all the functionality of the player will be here
 class Player(pygame.sprite.Sprite):
@@ -70,6 +71,11 @@ class Player(pygame.sprite.Sprite):
 
         self.image = self.animation[self.action][int(self.frame_index)]
     
+    def check_player_name(self):
+        if config.platform_player != self.char:
+            self.char = config.platform_player
+            self.get_imgs()
+
     # died
     def dead(self):
         self.jump()
@@ -86,20 +92,21 @@ class Player(pygame.sprite.Sprite):
 
     # getting imgs
     def get_imgs(self):
+        self.animation = []
         idle = import_sprite_sheet(
-            f"assets/character/{self.char}/idle.png", (32, 32), self.scale)
+            f"assets/character/chars/{self.char}/idle.png", (32, 32), self.scale)
         jump = import_sprite_sheet(
-            f"assets/character/{self.char}/jump.png", (32, 32), self.scale)
+            f"assets/character/chars/{self.char}/jump.png", (32, 32), self.scale)
         run = import_sprite_sheet(
-            f"assets/character/{self.char}/run.png", (32, 32), self.scale)
+            f"assets/character/chars/{self.char}/run.png", (32, 32), self.scale)
         fall = import_sprite_sheet(
-            f"assets/character/{self.char}/fall.png", (32, 32), self.scale)
+            f"assets/character/chars/{self.char}/fall.png", (32, 32), self.scale)
         hit = import_sprite_sheet(
-            f"assets/character/{self.char}/hit.png", (32, 32), self.scale)
+            f"assets/character/chars/{self.char}/hit.png", (32, 32), self.scale)
         wall = import_sprite_sheet(
-            f"assets/character/{self.char}/wall.png", (32, 32), self.scale)
+            f"assets/character/chars/{self.char}/wall.png", (32, 32), self.scale)
         doublejump = import_sprite_sheet(
-            f"assets/character/{self.char}/doublejump.png", (32, 32), self.scale)
+            f"assets/character/chars/{self.char}/doublejump.png", (32, 32), self.scale)
         
         for i in range(1, 6):
             img = pygame.image.load(f"assets/items/dust_particles/run/run_{i}.png")
@@ -193,6 +200,7 @@ class Player(pygame.sprite.Sprite):
             self.animate()
 
     def update(self):
+        self.check_player_name()
         self.get_input()
         self.get_gravity()
         self.animate()

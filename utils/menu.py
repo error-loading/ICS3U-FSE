@@ -1,6 +1,7 @@
 import pygame
 import os
 from constants import *
+from utils.support import import_sprite_sheet
 from config import config
 
 
@@ -20,10 +21,15 @@ class Menu:
         self.overworld_chars = []
         self.overworld_names = []
 
+        self.platform_chars = []
+        self.platform_names = []
+
         self.get_imgs()
 
     # selection system
         self.index = 0
+        self.index2 = 0
+        self.quelleUn = 0   # pov: me going crazy while coding at 3am one day
         self.selection_time = None
         self.can_move = True
     
@@ -34,18 +40,47 @@ class Menu:
                 img = pygame.transform.scale(img, (200, 200))
                 self.overworld_chars.append(img)
                 self.overworld_names.append(char)
+        
+        for char in os.listdir("assets/character/chars"):
+            if char != ".DS_Store":
+                img = import_sprite_sheet(f"assets/character/chars/{char}/idle.png", (32, 32))[0]
+                img = pygame.transform.scale(img, (200, 200))
+                self.platform_chars.append(img)
+                self.platform_names.append(char)
+
 
 
     def input(self):
         keys = pygame.key.get_pressed()
 
         if self.can_move:
-            if keys[pygame.K_RIGHT] and self.index < len(self.overworld_chars) - 1:
-                self.index += 1
+            if self.quelleUn == 0:
+                if keys[pygame.K_UP] and self.index < len(self.overworld_chars) - 1:
+                    self.index += 1
+                    self.can_move = False
+                    self.selection_time = pygame.time.get_ticks()
+                elif keys[pygame.K_DOWN] and self.index > 0:
+                    self.index -= 1
+                    self.can_move = False
+                    self.selection_time = pygame.time.get_ticks()
+            
+            else:
+                if keys[pygame.K_UP] and self.index2 < len(self.platform_chars) - 1:
+                    self.index2 += 1
+                    self.can_move = False
+                    self.selection_time = pygame.time.get_ticks()
+                elif keys[pygame.K_DOWN] and self.index2 > 0:
+                    self.index2 -= 1
+                    self.can_move = False
+                    self.selection_time = pygame.time.get_ticks()
+            
+            if keys[pygame.K_RIGHT]:
+                self.quelleUn = 1
                 self.can_move = False
                 self.selection_time = pygame.time.get_ticks()
-            elif keys[pygame.K_LEFT] and self.index > 0:
-                self.index -= 1
+            
+            elif keys[pygame.K_LEFT]:
+                self.quelleUn = 0
                 self.can_move = False
                 self.selection_time = pygame.time.get_ticks()
 
@@ -77,9 +112,13 @@ class Menu:
         self.input()
         self.selection_cooldown()
         config.overworld_player = self.overworld_names[self.index]
+        config.platform_player = self.platform_names[self.index2]
 
-        for index, item in enumerate(self.item_list):                 
-            item.display(self.display_surface, index, self.index, self.names[index], self.overworld_chars, self.overworld_names)
+        for index, item in enumerate(self.item_list):       
+            if not index:           
+                item.display(self.display_surface, self.quelleUn, self.index, self.names[index], self.overworld_chars, self.overworld_names)
+            else:           
+                item.display(self.display_surface, self.quelleUn, self.index2, self.names[index], self.platform_chars, self.platform_names)
 
 class Item:
     def __init__(self, l, t, w, h, index, font):
@@ -88,7 +127,8 @@ class Item:
         self.font = font
 
     def display_name(self, surface, name, img, img_name, selected):
-        colour = BLACK if selected else "#EEEEEE"
+        print(selected)
+        colour = WHITE if selected else "#EEEEEE"
 
         title = self.font.render(name, False, colour)
         title_rect = title.get_rect(midtop = self.rect.midtop + pygame.math.Vector2(0, 20))
@@ -106,6 +146,7 @@ class Item:
                 
     def display(self, surface, selection_num, num, name, char_imgs : list, char_names : list):
         pygame.draw.rect(surface, "#222222", self.rect, 0, 5)
+        print(selection_num)
         self.display_name(surface, name, char_imgs[num], char_names[num], self.index == selection_num)
 
 
