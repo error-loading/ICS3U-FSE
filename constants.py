@@ -18,7 +18,7 @@ UI_FONT = 'font/joystix.ttf'
 UI_FONT_SIZE = 18
 
 # basic colours
-GRAY = "#EEEEEE"
+GRAY = "#222222"
 NAVYBLUE = (60, 60, 100)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
