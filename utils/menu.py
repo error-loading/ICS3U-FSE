@@ -99,6 +99,7 @@ class Menu:
 
             top = self.display_surface.get_size()[1] * 0.1
 
+            print(item, index)
             item = Item(left, top, self.width, self.height, index, self.font)
             self.item_list.append(item)
 
@@ -126,10 +127,7 @@ class Item:
         self.index = index
         self.font = font
 
-    def display_name(self, surface, name, img, img_name, selected):
-        print(selected)
-        colour = WHITE if selected else "#EEEEEE"
-
+    def display_name(self, surface, name, img, img_name, colour):
         title = self.font.render(name, False, colour)
         title_rect = title.get_rect(midtop = self.rect.midtop + pygame.math.Vector2(0, 20))
 
@@ -146,7 +144,12 @@ class Item:
                 
     def display(self, surface, selection_num, num, name, char_imgs : list, char_names : list):
         pygame.draw.rect(surface, "#222222", self.rect, 0, 5)
-        print(selection_num)
-        self.display_name(surface, name, char_imgs[num], char_names[num], self.index == selection_num)
+        if self.index == selection_num:
+            pygame.draw.rect(surface, BLUE, self.rect, 5, 5)
+            self.display_name(surface, name, char_imgs[num], char_names[num], WHITE)
+        
+        else:
+            self.display_name(surface, name, char_imgs[num], char_names[num], "#EEEEEE")
+
 
 
