@@ -47,3 +47,13 @@ lvl5 = {
     "oneway" : "levels/level_5/level5_oneway.csv",
     "bg_col" : "green"
 }
+
+lvl6 = {
+    "terrain" : "levels/level_6/level6_terrain.csv",
+    "player" : "levels/level_6/level6_player.csv",
+    "traps" : "levels/level_6/level6_traps.csv",
+    "fruits" : "levels/level_6/level6_fruits.csv",
+    "limits" : "levels/level_6/level6_limits.csv",
+    "oneway" : "levels/level_6/level6_oneway.csv",
+    "bg_col" : "green"
+}
