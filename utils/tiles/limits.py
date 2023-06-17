@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+limits.py
+THis is the class for Limit, mainly used to create a rect to detect collision
+'''
+
 import pygame
 from constants import *
 

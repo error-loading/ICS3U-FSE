@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+fire.py
+This file contains the Fire class for the fire trap
+'''
+
 import pygame
 from utils.support import import_sprite_sheet
 from constants import *
@@ -8,6 +14,7 @@ class Fire(pygame.sprite.Sprite):
         self.posX = posX
         self.posY = posY
 
+        # spritesheet for turning on and off
         self.fire_off = pygame.image.load("assets/traps/Fire/Off.png").convert_alpha()
         self.fire_on = import_sprite_sheet("assets/traps/Fire/Hit (16x32).png", (16, 32)) + import_sprite_sheet("assets/traps/Fire/On (16x32).png", (16, 32))
 
@@ -20,6 +27,7 @@ class Fire(pygame.sprite.Sprite):
         self.image = self.fire_off
         self.rect = self.image.get_rect(topleft = (posX, posY))
 
+    # same logic as before
     def animate(self):
         if self.get_hit():
             self.frame_index += self.frame_rate
@@ -32,10 +40,11 @@ class Fire(pygame.sprite.Sprite):
         else:
             self.image = self.fire_off
 
-        
+    # used in level.py if it collides with player
     def set_hit(self, val : bool):
         self.hit = val
     
+    # return if it has collided
     def get_hit(self):
         return self.hit
 

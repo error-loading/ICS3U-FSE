@@ -1,6 +1,13 @@
+'''
+Gurjas Dhillon
+falling_trap.py
+This file contains the FallingTrap class for the corresponding trap
+'''
+
 import pygame
 from utils.support import import_sprite_sheet
 from constants import *
+
 
 class FallingTrap(pygame.sprite.Sprite):
     def __init__(self, posX, posY):
@@ -21,22 +28,26 @@ class FallingTrap(pygame.sprite.Sprite):
         self.dead = False
         self.timer = 0
 
+    # same logic as every other animating method
     def animate(self):
         self.frame_index += self.frame_rate
         self.frame_index %= len(self.collection)
 
         self.image = self.collection[int(self.frame_index)]
     
+    # destroying the trap after colloding
     def destroy(self):
         self.frame_rate = 0
         self.collection = [pygame.image.load("assets/traps/falling/Off.png").convert_alpha()]
 
+        # delay and then fall
         if self.timer >= 10:
             self.rect.y += self.gravity
 
         self.timer += 1
 
-        if  self.rect.y > HEIGHT:
+        # kill if leave page
+        if self.rect.y > HEIGHT:
             self.kill()
 
     def update(self, shiftX, shiftY):

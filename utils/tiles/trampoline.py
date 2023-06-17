@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+trampoline.py
+TRampoline class
+'''
+
 import pygame
 from utils.support import import_sprite_sheet
 from constants import *

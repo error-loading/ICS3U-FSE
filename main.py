@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+main.py
+All the code is bundled up here (the main while loop)
+'''
+
 import pygame
 import sys
 
@@ -6,7 +12,7 @@ from utils.level import Level
 from utils.overworld import Overworld
 from utils.intro import Intro
 from config import config
-from game_data import lvl1, lvl2, lvl3, lvl4, lvl5, lvl6
+from game_data import lvl1, lvl2, lvl3, lvl4, lvl5, lvl6  
 
 pygame.init()
 
@@ -21,6 +27,7 @@ lvl1 = Level(screen, lvl1, overworld)
 lvl2 = Level(screen, lvl2, overworld)
 lvl3 = Level(screen, lvl3, overworld)
 lvl4 = Level(screen, lvl4, overworld)
+# the next two levels need to be scaled by a factor of 2
 lvl5 = Level(screen, lvl5, overworld, (32, 32))
 lvl6 = Level(screen, lvl6, overworld, (32, 32))
 intro = Intro(screen)
@@ -31,6 +38,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         
+        # this is to toggle the menu
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q and config.state == "overworld":
                 overworld.toggle()

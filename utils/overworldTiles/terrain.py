@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+terrain.py
+THis file gets the terrain.png and returns the tileset corresponding
+'''
+
 import pygame
 
 # class for the terrain tiles

@@ -1,3 +1,10 @@
+'''
+Gurjas Dhillon
+game_data.py
+This file holds dictionaries to all the layers for each level
+'''
+
+# level 1 csv file pathways
 lvl1 = {
     "terrain" : "levels/level_1/level1_terrain.csv",
     "player" : "levels/level_1/level1_player.csv",
@@ -8,6 +15,7 @@ lvl1 = {
     "bg_col" : "yellow"
 }
 
+# level 2 csv file pathways
 lvl2 = {
     "terrain" : "levels/level_2/level2_terrain.csv",
     "player" : "levels/level_2/level2_player.csv",
@@ -18,6 +26,7 @@ lvl2 = {
     "bg_col" : "brown"
 }
 
+# level 3 csv file pathways
 lvl3 = {
     "terrain" : "levels/level_3/level3_terrain.csv",
     "player" : "levels/level_3/level3_player.csv",
@@ -28,6 +37,7 @@ lvl3 = {
     "bg_col" : "green"
 }
 
+# level 4 csv file pathways
 lvl4 = {
     "terrain" : "levels/level_4/level4_terrain.csv",
     "player" : "levels/level_4/level4_player.csv",
@@ -38,6 +48,7 @@ lvl4 = {
     "bg_col" : "green"
 }
 
+# level 5 csv file pathways
 lvl5 = {
     "terrain" : "levels/level_5/level5_terrain.csv",
     "player" : "levels/level_5/level5_player.csv",
@@ -48,6 +59,7 @@ lvl5 = {
     "bg_col" : "green"
 }
 
+# level 6 csv file pathways
 lvl6 = {
     "terrain" : "levels/level_6/level6_terrain.csv",
     "player" : "levels/level_6/level6_player.csv",

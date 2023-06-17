@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+arrow.py
+This file contains the Arrow trap
+'''
+
 import pygame
 from utils.support import import_sprite_sheet
 from constants import *
@@ -9,6 +15,7 @@ class Arrow(pygame.sprite.Sprite):
         self.posY = posY
         self.scale = scale
 
+        # spritesheet for idle and when it collides
         self.collection = import_sprite_sheet("assets/traps/arrow/Idle (18x18).png", (18, 18), self.scale)
         self.hit_collection = import_sprite_sheet("assets/traps/arrow/Hit (18x18).png", (18, 18), self.scale)
 
@@ -21,6 +28,7 @@ class Arrow(pygame.sprite.Sprite):
         self.image = self.collection[0]
         self.rect = self.image.get_rect(topleft = (posX, posY))
 
+# animating through the sprites
     def animate(self):
         self.frame_index += self.frame_rate
 
@@ -33,7 +41,8 @@ class Arrow(pygame.sprite.Sprite):
             
         else:
             self.image = self.collection[int(self.frame_index)]
-        
+    
+    # doing stuff if it collides
     def hit_arrow(self):
         self.frame_index = 0
         self.hit = True

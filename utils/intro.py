@@ -1,6 +1,12 @@
+'''
+Gurjas Dhillon
+intro.py
+This is the starting page of the game
+'''
+
 import pygame
 from constants import *
-from utils.btn import Button
+
 from config import config
 
 
@@ -12,7 +18,6 @@ class Intro:
 
         self.zombiootitle = pygame.font.Font("font/Futurot.ttf", 130)
 
-        self.start_btn = Button(WIDTH // 2 - 75, HEIGHT // 2 - 90, self.start_image, 1)
 
         self.clicked = False
 

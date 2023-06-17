@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+particles.py
+This file contains the class for jumps particles
+'''
+
 import pygame
 
 class Particles(pygame.sprite.Sprite):
@@ -19,12 +25,13 @@ class Particles(pygame.sprite.Sprite):
     def animation(self):
         self.frame_index += self.frame_rate
 
+        # delete if it reaches the end
         if self.frame_index >= len(self.animations):
             self.kill()
         else:
             self.image = self.animations[int(self.frame_index)]
 
-    
+    # getting all the images 
     def get_imgs(self):
         for i in range(1, 7):
             img = pygame.image.load(f"assets/items/dust_particles/jump/jump_{i}.png").convert_alpha()

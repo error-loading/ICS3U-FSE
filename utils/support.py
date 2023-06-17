@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+support.py
+This file contains multiple useful functions that will be needed throughout all the files
+'''
+
 import pygame
 from csv import reader
 import json
@@ -12,9 +18,11 @@ def import_sprite_sheet(path, sz, scale=None):
 
 	rows = int(height / sz[1])
 	
+	# go through all the rows
 	for row in range(rows):
 		frame_no = 0
 
+		# checks for any extra padding
 		while frame_no * sz[0] < width:
 			frame = pygame.Surface(sz)
 			rect = (frame_no * sz[0], row * sz[1], sz[0], sz[1])

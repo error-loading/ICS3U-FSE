@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+constants.py
+This file contains a bunch of constants that might be required in a multiple files
+'''
+
 # tiled info
 TILESIZE = 16
 MAP_HEIGHT = 42
@@ -12,7 +18,7 @@ UI_FONT = 'font/joystix.ttf'
 UI_FONT_SIZE = 18
 
 # basic colours
-GRAY = (100, 100, 100)
+GRAY = "#EEEEEE"
 NAVYBLUE = (60, 60, 100)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)

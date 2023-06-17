@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+sprite.py
+This class has the spikes class
+'''
+
 import pygame
 
 class Spikes(pygame.sprite.Sprite):

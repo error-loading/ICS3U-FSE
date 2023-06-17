@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+player.py
+This file contains the player of the overworld
+'''
+
 import pygame
 from utils.support import import_sprite_sheet
 from constants import *
@@ -60,7 +66,7 @@ class Player(pygame.sprite.Sprite):
         else:
             self.image = self.animation[self.IDLE][self.action - 1]
     
-    # check
+    # checking collision -> where and where cant the player move
     def collision(self, direction):
         if direction == "horizontal":
             for sprite in self.limit:
@@ -82,7 +88,8 @@ class Player(pygame.sprite.Sprite):
                     if self.direction.y < 0:
                         self.rect.top = sprite.rect.bottom
 
-        
+    
+    # circle transition
     def cover_bg(self, lvl_num):
         # Increase the circle's radius
         self.current_radius += self.animation_speed
@@ -95,7 +102,7 @@ class Player(pygame.sprite.Sprite):
         if self.current_radius == self.target_radius:
             config.state = f"lvl{lvl_num}"
             
-
+    # check if it enters a house
     def check_lvl_collision(self):
         for i in range(1, len(self.lvls) + 1):
             for sprite in self.lvls[i - 1]:
@@ -166,6 +173,7 @@ class Player(pygame.sprite.Sprite):
             self.direction.y = 0 
             self.idle = True
 
+    # moving the character
     def move(self, speed):
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()

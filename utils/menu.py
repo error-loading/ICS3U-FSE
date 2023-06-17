@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+menu.py
+This file contains all the code for the menu during overworld
+'''
+
 import pygame
 import os
 from constants import *
@@ -33,6 +39,7 @@ class Menu:
         self.selection_time = None
         self.can_move = True
     
+    # getting the images for all the overworld character and their names and also the platformer chars and names
     def get_imgs(self):
         for char in os.listdir("assets/overworld/Characters"):
             if char != ".DS_Store":
@@ -49,12 +56,15 @@ class Menu:
                 self.platform_names.append(char)
 
 
-
+    # all sorts of input
     def input(self):
         keys = pygame.key.get_pressed()
 
+        # can move is too make sure there is a delay
         if self.can_move:
+            # left side
             if self.quelleUn == 0:
+                # to switch between chars
                 if keys[pygame.K_UP] and self.index < len(self.overworld_chars) - 1:
                     self.index += 1
                     self.can_move = False
@@ -64,7 +74,9 @@ class Menu:
                     self.can_move = False
                     self.selection_time = pygame.time.get_ticks()
             
+            # right side
             else:
+                # switch between chars
                 if keys[pygame.K_UP] and self.index2 < len(self.platform_chars) - 1:
                     self.index2 += 1
                     self.can_move = False
@@ -74,41 +86,42 @@ class Menu:
                     self.can_move = False
                     self.selection_time = pygame.time.get_ticks()
             
+            # swithcing to right side
             if keys[pygame.K_RIGHT]:
                 self.quelleUn = 1
                 self.can_move = False
                 self.selection_time = pygame.time.get_ticks()
             
+            # switching to left side
             elif keys[pygame.K_LEFT]:
                 self.quelleUn = 0
                 self.can_move = False
                 self.selection_time = pygame.time.get_ticks()
 
-            if keys[pygame.K_SPACE]:
-                self.can_move = False
-                self.selection_time = pygame.time.get_ticks()
-                print(self.index)
-
+    # creating the items
     def create_items(self):
         self.item_list = []
 
         for item, index in enumerate(range(len(self.names))):
+            # positial arguments
             full_width = self.display_surface.get_size()[0]
             increment = full_width // len(self.names)
             left = (item * increment) + (increment - self.width) // 2
 
             top = self.display_surface.get_size()[1] * 0.1
 
-            print(item, index)
+            # getting an instance and putting into list
             item = Item(left, top, self.width, self.height, index, self.font)
             self.item_list.append(item)
 
+    # make a delay between actions
     def selection_cooldown(self):
         if not self.can_move:
             current_time = pygame.time.get_ticks()
             if current_time - self.selection_time >= 300:
                 self.can_move = True
 
+    # similar to the run method in other classes
     def display(self):
         self.input()
         self.selection_cooldown()
@@ -128,16 +141,20 @@ class Item:
         self.font = font
 
     def display_name(self, surface, name, img, img_name, colour):
+        # title
         title = self.font.render(name, False, colour)
         title_rect = title.get_rect(midtop = self.rect.midtop + pygame.math.Vector2(0, 20))
 
+        # char img
         char = pygame.Surface((img.get_width(), img.get_height()))
         char.blit(img, (0, 0))
         char_rect = char.get_rect(midtop = self.rect.midtop + pygame.math.Vector2(0, 80))
 
+        # name of img
         name = self.font.render(img_name, False, colour)
         name_rect = name.get_rect(midtop = self.rect.midtop + pygame.math.Vector2(0, 300))
 
+        # blitting to screen
         surface.blit(title, title_rect)
         surface.blit(char, char_rect)
         surface.blit(name, name_rect)

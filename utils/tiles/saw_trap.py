@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+saw_rtrappy
+This file contains the Saw_trap class
+'''
+
 import pygame
 from utils.support import import_sprite_sheet
 from constants import *
@@ -35,40 +41,6 @@ class Saw_Trap(pygame.sprite.Sprite):
     
     def switch(self):
         self.direction.x *= -1
-    
-    def check_pos(self):
-        x = self.x
-        y = self.y
-
-        # # check if the saw is in top row
-        # if self.terrain[x][y-1] == "-1":
-        #     # top right
-        #     if self.terrain[x+1][y] == "-1":
-        #         self.direction.x = 1
-        #         self.direction.y = 0
-            
-        #     # top left
-        #     elif self.terrain[x-1][y] == "-1":
-        #         self.direction.x = 1
-        #         self.direction.y = 0
-        
-        # # check it is in bottom row
-        # elif self.terrain[x][y+1] == "-1":
-        #     # bottom right
-        #     if self.terrain[x+1][y] == "-1":
-        #         self.direction.x = -1
-        #         self.direction.y = 0
-            
-        #     # bottom left
-        #     if self.terrain[x-1][y] == "-1":
-        #         self.direction.x = 0
-        #         self.direction.y = -1
-    
-        # left bound
-        # if self.limit[x][y] == 0:
-        #     self.direction.x *= -1
-
-
 
     def move(self):
         self.rect.center += self.direction
@@ -80,6 +52,5 @@ class Saw_Trap(pygame.sprite.Sprite):
         self.x += (self.rect.x - self.x * TILESIZE) // TILESIZE
         self.y += (self.rect.y - self.y * TILESIZE) // TILESIZE
 
-        self.check_pos()
         self.animate()
         self.move()

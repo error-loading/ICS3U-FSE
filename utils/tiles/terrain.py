@@ -1,3 +1,9 @@
+'''
+Gurjas Dhillon
+terrain.py
+This file contains the Oterrain class
+'''
+
 import pygame
 
 # class for the terrain tiles
