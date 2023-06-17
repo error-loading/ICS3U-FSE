@@ -22,7 +22,7 @@ class Player(pygame.sprite.Sprite):
         self.animation = []
         self.flip = False
 
-        self.get_imgs()
+        self.get_imgs(self.char)
 
         # circle animations stuff
         self.circle_pos = (WIDTH // 2, HEIGHT // 2)
@@ -109,13 +109,15 @@ class Player(pygame.sprite.Sprite):
 
 
     # getting imgs
-    def get_imgs(self):
+    def get_imgs(self, char):
         idle = import_sprite_sheet(
-            f"assets/overworld/Characters/{self.char}/SeparateAnim/Idle.png", (16, 16), self.scale)
+            f"assets/overworld/Characters/{char}/SeparateAnim/Idle.png", (16, 16), self.scale)
         move = import_sprite_sheet(
-            f"assets/overworld/Characters/{self.char}/SeparateAnim/Walk.png", (16, 16), self.scale)
+            f"assets/overworld/Characters/{char}/SeparateAnim/Walk.png", (16, 16), self.scale)
 
         row = 4
+
+        self.animation = []
         
         self.animation.append(idle)
 

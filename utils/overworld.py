@@ -3,13 +3,14 @@ from utils.support import import_sprite_sheet, import_csv
 from utils.overworldTiles.terrain import Terrain
 from utils.overworldTiles.player import Player
 from utils.menu import Menu
+from config import config
 
 TILESIZE = 32
 
 class Overworld:
     def __init__(self, screen):
         self.screen = screen
-        self.player = "Samurai"
+        self.player = config.overworld_player
 
         self.game_paused = False
         self.menu = Menu()
@@ -125,6 +126,12 @@ class Overworld:
         
         return group
 
+    def check_name_changed(self):
+        if config.overworld_player != self.player:
+            self.player = config.overworld_player
+            self.player_sprites.sprite.get_imgs(self.player)
+
+
     def reset(self):
         self.__init__(self.screen)
 
@@ -132,6 +139,8 @@ class Overworld:
         self.game_paused = not self.game_paused
 
     def run(self):
+        self.check_name_changed()
+
         self.terrain_sprites.draw(self.screen)
         self.terrain_sprites.update()
 
@@ -143,7 +152,7 @@ class Overworld:
 
         self.nature_sprites.draw(self.screen)
         self.nature_sprites.update()
-        
+
         self.floor_sprites.draw(self.screen)
         self.floor_sprites.update()
 
@@ -151,8 +160,6 @@ class Overworld:
     
         self.house_sprites.draw(self.screen)
         self.house_sprites.update()
-
-
 
         
         if not self.game_paused:
